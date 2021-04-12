@@ -1,0 +1,105 @@
+<template>
+    <div class="map">
+        <el-input v-model="addressKeyword" placeholder="请输入地址来直接查找相关位置"></el-input>
+        <!-- 给地图加点击事件getLocationPoint，点击地图获取位置相关的信息，经纬度啥的 -->
+        <!-- scroll-wheel-zoom：是否可以用鼠标滚轮控制地图缩放，zoom是视图比例 -->
+        <baidu-map
+                class="bmView"
+                :scroll-wheel-zoom="true"
+                :center="location"
+                :zoom="zoom"
+                @click="getLocationPoint"
+                ak="FV4ZcOesQ6tpzr8i0R0ePq0Q"
+        >
+            <bm-view style="width: 100%; height:600px; flex: 1"></bm-view>
+            <bm-local-search :keyword="addressKeyword" :auto-viewport="true" style="display: none"></bm-local-search>
+        </baidu-map>
+    </div>
+    <!--<baidu-map-->
+    <!--:center="center"-->
+    <!--:zoom="zoom"-->
+    <!--@moving="syncCenterAndMoving"-->
+    <!--@zoomend="syncCenterAndZoom"-->
+    <!--:scroll-wheel-zoom="true"-->
+    <!--@ready="finish"-->
+    <!--class="bm-view">-->
+    <!--<bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>-->
+    <!--<bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>-->
+    <!--<bm-control :offset="{width: '10px', height: '10px'}">-->
+    <!--<bm-auto-complete v-model="center" :sugStyle="{zIndex: 1}">-->
+    <!--<el-input v-model="center" ></el-input>-->
+    <!--</bm-auto-complete>-->
+    <!--</bm-control>-->
+    <!--<bm-local-search :keyword="center" :auto-viewport="true" ></bm-local-search>-->
+    <!--</baidu-map>-->
+</template>
+<script>
+
+    export default {
+        data(){
+            return{
+                lng:0,
+                lat:0,
+                geoCoder:{},
+                location: {
+                    lng: 116.404,
+                    lat: 39.915
+                },
+                zoom: 12.8,
+                addressKeyword: "",
+                center:"北京",
+                flag:false,
+                addSession:{pharmacyLatitude:'',pharmacyLongitude:''},
+            }
+        },
+        created(){
+
+        },
+        methods: {
+            getLocationPoint(e) {
+                this.lng = e.point.lng;
+                this.lat = e.point.lat;
+                /* 创建地址解析器的实例 */
+                let geoCoder = new BMap.Geocoder();
+                /* 获取位置对应的坐标 */
+                geoCoder.getPoint(this.addressKeyword, point => {
+                    this.selectedLng = point.lng;
+                    this.selectedLat = point.lat;
+                });
+                /* 利用坐标获取地址的详细信息 */
+                geocoder.getLocation(e.point, res=>{
+                    console.log(res);
+                })
+            },
+
+
+            //地图移动中
+            syncCenterAndMoving(e) {
+                const center = e.target.getCenter();
+                this.addSession.pharmacyLatitude = center.lat;
+                this.addSession.pharmacyLongitude = center.lng;
+                this.zoom = e.target.getZoom()
+            },
+            //地图缩放
+            syncCenterAndZoom (e) {
+                if(this.flag){
+                    this.syncCenterAndMoving(e)
+                }
+            },
+            //地图加载完
+            finish(Bmap,map){
+                //设置计时器，在地图加载完成后，执行地图的缩放（获取经纬度）
+                let time = setTimeout(()=>{
+                    this.flag = true
+                },1000)
+            }
+        }
+    }
+</script>
+<style>
+    .map {
+        width: 100%;
+        height: 400px;
+    }
+
+</style>
