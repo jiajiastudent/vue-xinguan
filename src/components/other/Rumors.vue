@@ -17,7 +17,7 @@
         </el-button>
       </el-button-group>
       <el-row :gutter="20">
-        <el-col style="margin-top: 10px;" v-for="item in rumorList" :key="item.id" :span="24">
+        <el-col style="margin-top: 10px;" v-for="item in rumorList" :key="item.id" :span="24" v-loading="loading">
           <div class="grid-content bg-purple">
             <el-row>
               <el-col :span="20" style="background-color: rgba(200,200,169,0.11)">
@@ -47,6 +47,7 @@
   export default {
     data() {
       return {
+        loading:true,
         count: 0,
         page: 1,
         rumorList: []
@@ -71,6 +72,7 @@
       async getData(page) {
         this.$http.get("https://lab.isaaclin.cn/nCoV/api/news?num=10&page="+page).then((response) => {
           this.rumorList = response.data.results;
+          this.loading=false;
           console.log(response.data.results)
         }, (error) => {
           // console.log('error:', error)
