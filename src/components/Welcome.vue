@@ -212,7 +212,8 @@ export default {
       rumorList: [],
       queryMap: { pageSize: 100, pageNum: 1 },
       xData: [],
-      yData: [],
+      yData1: [],
+      yData2: [],
       myData: [],
       value: new Date(),
       userInfo: {},
@@ -368,13 +369,15 @@ export default {
         this.total = res.data.total;
         this.tableData = res.data.rows;
         this.xData = [];
-        this.yData = [];
+        this.yData1 = [];
+        this.yData2 = [];
         this.selected = {};
         var $this = this;
         //构建表格条形统计图的数据
         this.tableData.forEach(function(e) {
           $this.xData.push(e.name);
-          $this.yData.push(e.stock);
+          $this.yData1.push(e.stock);
+          $this.yData2.push(e.waiting);
         });
         //重新绘制表格
         this.draw();
@@ -385,53 +388,63 @@ export default {
     /*绘制条形统计图*/
     draw() {
       var myChart = echarts.init(document.getElementById("tianxing"));
-      // 指定图表的配置项和数据
+      //指定图表的配置项和数据
       var option = {
-        title: {
-          text: "库存条形图"
-        },
+        title: {text: "库存条形图"},
         grid: {
           left: '0%',
           right: '5%',
           bottom: '0%',
           containLabel: true
         },
-        toolbox: {
-          show: true,
-        },
-        tooltip: {},
-        legend: {
-          data: ["库存量"]
-        },
+        toolbox: {show: true,},
+        tooltip: {trigger: "axis",},
+        legend: {data: ["库存量","待入库"]},//标签
         xAxis: {
-          data: this.xData
+          data: this.xData,
+          splitLine:{show:false,},
         },
         yAxis: {},
         series: [
           {
             name: "库存量",
-            radius: "10%",
+            stack:'使用情况',
             type: "bar",
             showBackground: false,
-            data: this.yData,
-
+            data: this.yData1,
             itemStyle: {
               normal: {
+                color:"#5470c6",
                 //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
-                color: function(params) {
-                  // build a color map as your need.
-                  var colorList = [
-                    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
-                    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
-                    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
-                  ];
-                  return colorList[params.dataIndex]
-                },
+                // color: function(params) {
+                //   // build a color map as your need.
+                //   var colorList = [
+                //     '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
+                //     '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
+                //     '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
+                //   ];
+                //   return colorList[params.dataIndex]
+                // },
                 //以下为是否显示，显示位置和显示格式的设置了
+                // label: {
+                //   show: true,
+                //   position: 'top',
+                //   formatter: '{b}\n{c}'
+                // }
+              }
+            },
+          },
+          {
+            name: "待入库",
+            type: "bar",
+            stack:'使用情况',
+            data: this.yData2,
+            itemStyle: {
+              normal: {
+                color:"rgba(84,112,198,0.42)",
                 label: {
                   show: true,
                   position: 'top',
-//                             formatter: '{c}'
                   formatter: '{b}\n{c}'
                 }
               }
@@ -440,6 +453,7 @@ export default {
 
         ]
       };
+
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
@@ -554,9 +568,7 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-
 .el-carousel__item h3 {
   color: #fff;
   font-size: 14px;
@@ -564,12 +576,10 @@ export default {
   line-height: 200px;
   margin: 0;
 }
-
 .el-carousel__item:nth-child(2n) {
   background-color: #fff;
   background-size: 100% 100%;
 }
-
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #ffffff;
   background-size: 100% 100%;
