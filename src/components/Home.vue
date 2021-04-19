@@ -3,9 +3,7 @@
 <!--    导航-->
     <el-header>
       <div>
-        <span style="margin-left:20px;">
-                 疫情物资收发调度系统
-        </span>
+        <span style="margin-left:20px;">疫情物资收发调度系统</span>
       </div>
       <el-dropdown>
         <div class="block">
@@ -39,7 +37,6 @@
           <MenuTree  :menuList="this.menuList"></MenuTree>
         </el-menu>
       </el-aside>
-
       <!--右边主体-->
       <el-main v-loading="loading">
 

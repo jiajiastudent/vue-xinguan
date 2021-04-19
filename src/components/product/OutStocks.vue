@@ -283,8 +283,15 @@
                 <baidu-map class="bmView" :scroll-wheel-zoom="true" :center="center" :zoom="zoom" ak="FV4ZcOesQ6tpzr8i0R0ePq0Q" >
                     <bm-local-search :keyword="addressKeyword" :auto-viewport="true" style="display: none"></bm-local-search>
                     <bm-view style="width: 100%; height:800px; flex: 1" ></bm-view>
-                    <bm-driving :start="start" :end="start"
-                                :waypoints="waypoints"></bm-driving>
+                  <bm-driving
+                      :start="{lng: 116.124343, lat: 39.964918}"
+                      :end="{lng: 116.124343, lat: 39.964918}"
+                      :auto-viewport="true"
+                      :waypoints=waypoints></bm-driving>
+<!--                    <bm-driving :start="start" :end="start"-->
+<!--                                :waypoints="waypoints"></bm-driving>-->
+<!--                  <bm-polyline :path="waypoints" stroke-color="blue" :stroke-opacity="1" :stroke-weight="4" :editing="false">-->
+<!--                  </bm-polyline>-->
                 </baidu-map>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="mapDialogVisible = false">取 消</el-button>
@@ -334,23 +341,30 @@
         methods:{
             //获取地图信息
             ClickGetMap(consumerList) {
-                this.waypoints=[]
+                this.waypoints=[];
                 /*this.waypoints.splice(0, this.waypoints.length);*/
-                let list = consumerList.map(item => ({
-                    lng: item.lng,
-                    lat: item.lat
-                }));
-                for (let i = 1; i < list.length; i++) {
-                    this.waypoints.push(list[i]);
-                }
+              console.log(consumerList)
+                // let list = consumerList.map(item => ({
+                //     lng: item.lng,
+                //     lat: item.lat
+                // }));
+                // for (let i = 1; i < list.length; i++) {
+                //     this.waypoints.push(list[i]);
+                //     console.log((list[i]))
+                // }
+                //
+              for (let item of consumerList){
+                this.waypoints.push({lng:item.lng,lat:item.lat});
+              }
                 console.log("way:")
                 console.log(this.waypoints)
-                console.log("list:")
-                console.log(list)
+                // console.log("list:")
+                // console.log(list)
                 this.mapDialogVisible=true;
             },
             //关闭地圖信息弹出框
             closeMapDialog() {
+              this.mapDialogVisible=false;
             },
                 async getCarListType(){
                 const { data: res } = await this.$http.get(

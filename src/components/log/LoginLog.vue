@@ -47,13 +47,7 @@
           <el-table-column prop="userBrowser" label="浏览器"></el-table-column>
           <el-table-column label="操作" width="100px;">
             <template slot-scope="scope">
-              <el-button
-               v-hasPermission="'loginLog:delete'"
-                type="text"
-                size="mini"
-                icon="el-icon-delete"
-                @click="del(scope.row.id)"
-              >删除</el-button>
+              <el-button v-hasPermission="'loginLog:delete'" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

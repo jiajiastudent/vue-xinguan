@@ -20,11 +20,14 @@ const Plugins = [ hasPermission ]
 Plugins.map((plugin) => {
   Vue.use(plugin)
 })
-
+Vue.use(BaiduMap,{
+    ak:'FV4ZcOesQ6tpzr8i0R0ePq0Q'
+});
 // Vue.use(VueSource)
 Vue.use(VueQuillEditor)
 Vue.use(ZkTable)
 Vue.use(echarts)
+// Vue.use(BaiduMap);
 
 NProgress.configure({ ease: 'ease', speed: 500 });
 NProgress.configure({ minimum: 0.3 });

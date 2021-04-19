@@ -398,7 +398,9 @@ export default {
           containLabel: true
         },
         toolbox: {show: true,},
-        tooltip: {trigger: "axis",},
+        tooltip: {
+          trigger: "axis",
+        },
         legend: {data: ["库存量","待入库"]},//标签
         xAxis: {
           data: this.xData,
@@ -414,7 +416,7 @@ export default {
             data: this.yData1,
             itemStyle: {
               normal: {
-                color:"#5470c6",
+                color:"#3d6198",
                 //好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
                 // color: function(params) {
                 //   // build a color map as your need.
@@ -433,6 +435,23 @@ export default {
                 // }
               }
             },
+            //警戒线
+            markLine : {
+              symbol:"none",               //去掉警戒线最后面的箭头
+              label:{
+                position:"end",         //将警示值放在哪个位置，三个值“start”,"middle","end"  开始  中点 结束
+                formatter: "warn"
+              },
+              data : [{
+                silent:false,             //鼠标悬停事件  true没有，false有
+                lineStyle:{               //警戒线的样式  ，虚实  颜色
+                  type:"solid",
+                  color:"rgba(238,99,99,0.5)"
+                },
+                name: 'warn',
+                yAxis: 20
+              }]
+            }
           },
           {
             name: "待入库",
@@ -441,7 +460,7 @@ export default {
             data: this.yData2,
             itemStyle: {
               normal: {
-                color:"rgba(84,112,198,0.42)",
+                color:"rgba(61,97,152,0.62)",
                 label: {
                   show: true,
                   position: 'top',
@@ -488,7 +507,7 @@ export default {
           {
             name: "物资名称",
             type: "pie",
-            radius: "50%",
+            radius: "90%",
             center: ["50%", "50%"],
             data: this.seriesData,
             emphasis: {
