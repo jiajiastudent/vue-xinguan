@@ -240,22 +240,22 @@
               border
             >
               <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-              <el-table-column prop="imageUrl" label="图片" align="center" width="150px" padding="0px">
-                <!--            <template slot-scope="scope">-->
-                <!--              <img-->
-                <!--                slot="error"-->
-                <!--                :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
-                <!--                alt-->
-                <!--                style="width: 55px;height:55px"-->
-                <!--              />-->
-                <!--            </template>-->
-                <template slot-scope="scope">
-                  <el-popover placement="right"  trigger="hover">
-                    <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"  style="height: 200px;width: 200px"/>
-                    <img  slot="reference" :src="'https://www.zykhome.club/'+scope.row.imageUrl" :alt="scope.row.imgUrl" style="height: 32px;width: 32px;cursor: pointer">
-                  </el-popover>
-                </template>
-              </el-table-column>
+<!--              <el-table-column prop="imageUrl" label="图片" align="center" width="150px" padding="0px">-->
+<!--                &lt;!&ndash;            <template slot-scope="scope">&ndash;&gt;-->
+<!--                &lt;!&ndash;              <img&ndash;&gt;-->
+<!--                &lt;!&ndash;                slot="error"&ndash;&gt;-->
+<!--                &lt;!&ndash;                :src="'https://www.zykhome.club/'+scope.row.imageUrl"&ndash;&gt;-->
+<!--                &lt;!&ndash;                alt&ndash;&gt;-->
+<!--                &lt;!&ndash;                style="width: 55px;height:55px"&ndash;&gt;-->
+<!--                &lt;!&ndash;              />&ndash;&gt;-->
+<!--                &lt;!&ndash;            </template>&ndash;&gt;-->
+<!--                <template slot-scope="scope">-->
+<!--                  <el-popover placement="right"  trigger="hover">-->
+<!--                    <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"  style="height: 200px;width: 200px"/>-->
+<!--                    <img  slot="reference" :src="'https://www.zykhome.club/'+scope.row.imageUrl" :alt="scope.row.imgUrl" style="height: 32px;width: 32px;cursor: pointer">-->
+<!--                  </el-popover>-->
+<!--                </template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="name" label="名称"></el-table-column>
               <el-table-column prop="pnum" label="商品编号" :show-overflow-tooltip='true'></el-table-column>
 
@@ -282,21 +282,21 @@
                   </el-button>
                 <el-table height="700" :data="products" border>
                   <el-table-column prop="name" label="名称" width="120px;"></el-table-column>
-                  <el-table-column
-                    prop="imageUrl"
-                    label="图片"
-                    align="center"
-                    width="150px"
-                    padding="0px"
-                  >
-                    <template slot-scope="scope">
-                      <img
-                        :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                        alt
-                        style="width: 50px;height:30px"
-                      />
-                    </template>
-                  </el-table-column>
+<!--                  <el-table-column-->
+<!--                    prop="imageUrl"-->
+<!--                    label="图片"-->
+<!--                    align="center"-->
+<!--                    width="150px"-->
+<!--                    padding="0px"-->
+<!--                  >-->
+<!--                    <template slot-scope="scope">-->
+<!--                      <img-->
+<!--                        :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
+<!--                        alt-->
+<!--                        style="width: 50px;height:30px"-->
+<!--                      />-->
+<!--                    </template>-->
+<!--                  </el-table-column>-->
                   <el-table-column prop="model" label="型号" width="100px;"></el-table-column>
 
                   <el-table-column label="数量" width="160">
@@ -311,15 +311,10 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="unit" label="单位" width="80px;"></el-table-column>
-                  <el-table-column label="操作" width="100px;" fixed="right">
+                  <el-table-column label="操作"  fixed="right">
                     <template slot-scope="scope">
-                      <el-button
-                        type="danger"
-                        size="mini"
-                        plain
-                        icon="el-icon-remove"
-                        @click="removeItem(scope.row.id)"
-                      >移除</el-button>
+                      <el-button type="danger" size="mini" plain icon="el-icon-remove"
+                                 @click="removeItem(scope.row.id)">移除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>

@@ -40,7 +40,7 @@
           @selection-change="selsChange"
         >
          <el-table-column type="selection" width="55" align="center"></el-table-column>
-          <el-table-column prop="operation" label="操作" width="150"></el-table-column>
+          <el-table-column prop="operation" label="操作" width="200"></el-table-column>
 
        <el-table-column :show-overflow-tooltip="true" prop="method" label="方法" width="180">
 
@@ -71,7 +71,7 @@
             <el-table-column prop="createTime" label="时间" sortable width="180"></el-table-column>
 
 
-          <el-table-column label="操作" width="100px;" fixed="right">
+          <el-table-column label="操作" width="100px;" >
             <template slot-scope="scope">
               <el-button type="text" size="mini"  v-hasPermission="'log:delete'" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>
             </template>

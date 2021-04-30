@@ -1,75 +1,36 @@
 <template>
   <div id="login">
     <h1 style="position: absolute;color: #fff;left: 50%;transform: translateX(-50%); top: -110px;">疫情物资收发调度系统</h1>
-    <el-form
-      :model="userLoginForm"
-      :rules="loginRules"
-      status-icon
-      ref="userLoginFormRef"
-      label-position="left"
-      label-width="0px"
-      class="demo-ruleForm login-page"
-    >
+    <el-form :model="userLoginForm" :rules="loginRules" status-icon
+      ref="userLoginFormRef" label-position="left" label-width="0px" class="demo-ruleForm login-page">
       <h3 class="title">登录</h3>
       <el-form-item prop="username">
-        <el-input
-          type="text"
-          @keyup.enter.native="handleSubmit"
-          v-model="userLoginForm.username"
-          auto-complete="off"
-          placeholder="用户名"
-          prefix-icon="iconfont el-icon-user"
-        ></el-input>
+        <el-input type="text" @keyup.enter.native="handleSubmit" v-model="userLoginForm.username"
+          auto-complete="off" placeholder="用户名" prefix-icon="iconfont el-icon-user"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input
-          @keyup.enter.native="handleSubmit"
-          type="password"
-          v-model="userLoginForm.password"
-          auto-complete="off"
-          placeholder="密码"
-          prefix-icon="el-icon-suitcase-1"
-        ></el-input>
+        <el-input @keyup.enter.native="handleSubmit" type="password" v-model="userLoginForm.password"
+          auto-complete="off" placeholder="密码" prefix-icon="el-icon-suitcase-1"></el-input>
       </el-form-item>
       <div></div>
 
       <el-checkbox v-model="checked" class="rememberme">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <div style="float:right;">
-          <el-button
-            type="primary"
-            class="el-icon-mobile-phone"
-            @click="handleSubmit"
-            :loading="loading">登录</el-button>
+          <el-button type="primary" class="el-icon-mobile-phone" @click="handleSubmit" :loading="loading">登录</el-button>
         </div>
       </el-form-item>
     </el-form>
-
     <!-- 验证码 -->
-    <Vcode
-      :show="isShow"
-      @success="success"
-      @close="close"
-      :canvasWidth="500"
-      :canvasHeight="350"
-    />
-
+    <Vcode :show="isShow" @success="success" @close="close" :canvasWidth="500" :canvasHeight="350"/>
     <el-dialog title="提示" :visible.sync="dialogVisible" width="45%">
-      <span>
-        后端采用SpringBoot，Shiro，通用Mapper开发API接口，
-        前端Vue
+      <span>后端采用SpringBoot，Shiro，通用Mapper开发API接口，前端Vue
       </span>
       <el-table border :data="tableData" style="width: 100%">
         <el-table-column prop="date" label="账号" width="180"></el-table-column>
         <el-table-column prop="name" label="密码" width="180"></el-table-column>
         <el-table-column prop="address" label="描述"></el-table-column>
       </el-table>
-      <br />一个可供初学者接触的前后端分离项目
-      后端项目：
-      <el-link href="https://github.com/zykzhangyukang/Xinguan" type="primary">厂库链接地址</el-link>&nbsp;&nbsp;&nbsp;
-      前端项目：
-      <el-link href="https://github.com/zykzhangyukang/Vue-Xinguan" type="primary">厂库链接地址</el-link>
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">点个赞</el-button>
         <el-button type="primary" @click="dialogVisible = false">去登入</el-button>
@@ -77,10 +38,8 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 import Vcode from "vue-puzzle-vcode";
-
 export default {
   data() {
     return {
@@ -89,10 +48,7 @@ export default {
       imgCode: undefined,
       //表单用户登入数据
       loading: false,
-      userLoginForm: {
-        username: "admin",
-        password: "123456"
-      },
+      userLoginForm: {username: "admin", password: "123456"},
       checked: true,
       //验证规则
       loginRules: {
@@ -106,33 +62,16 @@ export default {
         ]
       },
       tableData: [
-        {
-          date: "employee1",
-          name: "123456",
-          address: "系统入库操作员"
-        },
-        {
-          date: "employee2",
-          name: "123456",
-          address: "系统信息维护员"
-        },
-        {
-          date: "employee3",
-          name: "123456",
-          address: "系统监控员"
-        },
-        {
-          date: "employee4",
-          name: "123456",
-          address: "物资审核员"
-        }
+        {date: "employee1", name: "123456", address: "系统入库操作员"},
+        {date: "employee2", name: "123456", address: "系统信息维护员"},
+        {date: "employee3", name: "123456", address: "系统监控员"},
+        {date: "employee4", name: "123456", address: "物资审核员"}
       ]
     };
   },
   components: {
     Vcode
   },
-
   methods: {
     //登入提交
     handleSubmit: function() {
@@ -153,10 +92,8 @@ export default {
       this.loading = true;
       //发起登入请求
       const { data: res } = await this.$http.post(
-        "user/login?username=" +
-          this.userLoginForm.username +
-          "&password=" +
-          this.userLoginForm.password
+        "user/login?username=" + this.userLoginForm.username +
+          "&password=" + this.userLoginForm.password
       );
       console.log(res);
       if (res.code == 200) {
@@ -209,7 +146,6 @@ export default {
   position: relative;
 }
 
-
 .login-page {
   position: relative;
   -webkit-border-radius: 5px;
@@ -224,7 +160,6 @@ label.el-checkbox.rememberme {
   margin: 0px 0px 15px;
   text-align: left;
 }
-
 </style>
 
 

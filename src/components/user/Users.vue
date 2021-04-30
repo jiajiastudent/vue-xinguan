@@ -9,46 +9,23 @@
     <el-card class="box-card">
       <el-form :inline="true" ref="form" :model="queryMap" label-width="70px" size="small">
         <el-form-item label="部门">
-          <el-select
-            clearable
-            @change="searchUser"
-            @clear="searchUser"
-            v-model="queryMap.departmentId"
-            placeholder="请选择所属部门"
-          >
-            <el-option
-              v-for="department in departments"
-              :label="department.name"
-              :key="department.id"
-              :value="department.id"
-            >
+          <el-select clearable @change="searchUser" @clear="searchUser" v-model="queryMap.departmentId" placeholder="请选择所属部门">
+            <el-option v-for="department in departments" :label="department.name"
+              :key="department.id" :value="department.id">
               <span style="float: left">{{ department.name }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">
-                <el-tag size="small" effect="plain" type="success">
-                  {{ department.total }}人
-                </el-tag>
+                <el-tag size="small" effect="plain" type="success">{{ department.total }}人</el-tag>
               </span>
             </el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="用户名">
-          <el-input
-            @keyup.enter.native="searchUser"
-            @clear="searchUser"
-            clearable
-            v-model="queryMap.username"
-            placeholder="请输入用户名查询"
-          ></el-input>
+          <el-input @keyup.enter.native="searchUser" @clear="searchUser" clearable v-model="queryMap.username" placeholder="请输入用户名查询"></el-input>
         </el-form-item>
 
         <el-form-item label="邮箱">
-          <el-input
-            @keyup.enter.native="searchUser"
-            clearable
-            @clear="searchUser"
-            v-model="queryMap.email"
-            placeholder="请输入邮箱查询"
-          ></el-input>
+          <el-input @keyup.enter.native="searchUser" clearable @clear="searchUser" v-model="queryMap.email" placeholder="请输入邮箱查询"></el-input>
         </el-form-item>
 
         <el-form-item label="性别">
@@ -60,35 +37,16 @@
         <el-form-item label="昵称">
           <el-input clearable @clear="searchUser" v-model="queryMap.nickname" placeholder="请输入昵称查询"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="状态">
-          <el-select
-            clearable
-            v-model="queryMap.isban"
-            @clear="searchUser"
-            placeholder="请选择用户状态"
-          >
-            <el-option label="全部" value=""></el-option>
-            <el-option label="禁用" value="1"></el-option>
-            <el-option label="正常" value="0"></el-option>
-          </el-select>
-        </el-form-item>-->
-
         <el-form-item style="margin-left:50px;">
           <el-button  @click="reset" icon="el-icon-refresh">重置</el-button>
           <el-button type="primary" @click="searchUser" icon="el-icon-search">查询</el-button>
-          <el-button
-            type="success"
-            icon="el-icon-plus"
-            @click="addDialogVisible=true"
-            v-hasPermission="'user:add'"
-          >添加</el-button>
+          <el-button type="success" icon="el-icon-plus" @click="addDialogVisible=true" v-hasPermission="'user:add'">添加</el-button>
           <el-button @click="downExcel" v-hasPermission="'user:export'"  icon="el-icon-download">导出</el-button>
         </el-form-item>
       </el-form>
 
       <!-- 表格区域 -->
       <el-table v-loading="loading" size="small" :data="userList" border style="width: 100%;" height="420">
-        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column label="#" prop="id" width="50"></el-table-column>
         <el-table-column prop="username" label="用户名" width="110"></el-table-column>
         <el-table-colum prop="nickname" laber="昵称" width="110"></el-table-colum>
@@ -119,7 +77,8 @@
       </el-table>
       <!-- 分页 -->
       <el-pagination style="margin-top:10px;" background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="queryMap.pageNo" :page-sizes="[6, 10, 20, 30]" :page-size="queryMap.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
+        :current-page="queryMap.pageNo" :page-sizes="[6, 10, 20, 30]" :page-size="queryMap.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
       <!-- 添加对话框 -->
       <el-dialog title="添加用户" @close="closeDialog" :visible.sync="addDialogVisible" width="50%;">
         <!-- 表单 -->
@@ -173,25 +132,14 @@
             </el-form-item>
             <el-form-item prop="birth" label="生日">
               <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  value-format="yyyy年MM月dd日"
-                  placeholder="选择出生日期"
-                  v-model="addForm.birth"
-                  style="width: 100%;"
-                ></el-date-picker>
+                <el-date-picker type="date" value-format="yyyy年MM月dd日" placeholder="选择出生日期" v-model="addForm.birth" style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
           </el-form>
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="addUser"
-            :loading="btnLoading"
-            :disabled="btnDisabled"
-          >确 定</el-button>
+          <el-button type="primary" @click="addUser" :loading="btnLoading" :disabled="btnDisabled">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 修改对话框 -->
@@ -211,12 +159,7 @@
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="部门" prop="departmentId">
                     <el-select v-model="editForm.departmentId" placeholder="请选择所属部门">
-                      <el-option
-                        v-for="department in departments"
-                        :key="department.id"
-                        :label="department.name"
-                        :value="department.id"
-                      ></el-option>
+                      <el-option v-for="department in departments" :key="department.id" :label="department.name" :value="department.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
@@ -251,51 +194,27 @@
             </el-form-item>
             <el-form-item prop="birth" label="生日">
               <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  value-format="yyyy年MM月dd日"
-                  placeholder="选择出生日期"
-                  v-model="editForm.birth"
-                  style="width: 100%;"
-                ></el-date-picker>
+                <el-date-picker type="date" value-format="yyyy年MM月dd日" placeholder="选择出生日期" v-model="editForm.birth" style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
           </el-form>
         </span>
-
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="updateUser"
-            :loading="btnLoading"
-            :disabled="btnDisabled"
-          >确 定</el-button>
+          <el-button type="primary" @click="updateUser" :loading="btnLoading" :disabled="btnDisabled">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 分配角色对话框 -->
       <el-dialog center title="分配角色" :visible.sync="assignDialogVisible" width="49%">
         <span>
           <template>
-            <el-transfer
-              filterable
-              :titles="['未拥有','已拥有']"
-              :button-texts="['到左边', '到右边']"
-              v-model="value"
-              :data="roles"
-            ></el-transfer>
+            <el-transfer filterable :titles="['未拥有','已拥有']" :button-texts="['到左边', '到右边']" v-model="value" :data="roles"></el-transfer>
           </template>
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="assignDialogVisible = false" class="el-icon-close">取消分配</el-button>
-          <el-button
-            v-hasPermission="'user:assign'"
-            type="primary"
-            @click="doAssignRoles"
-            class="el-icon-check"
-            :loading="btnLoading"
-            :disabled="btnDisabled"
-          >确定分配</el-button>
+          <el-button v-hasPermission="'user:assign'" type="primary" @click="doAssignRoles" class="el-icon-check"
+                     :loading="btnLoading" :disabled="btnDisabled">确定分配</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -326,7 +245,6 @@ export default {
       setTimeout(() => {
         // Number.isInteger是es6验证数字是否为整数的方法,实际输入的数字总是识别成字符串
         // 所以在前面加了一个+实现隐式转换
-
         if (!Number.isInteger(+value)) {
           callback(new Error("请输入数字值"));
         } else {
@@ -349,24 +267,9 @@ export default {
       assignDialogVisible: false, //分配角色对话框
       labelPosition: "right", //lable对齐方式
       //查询对象
-      queryMap: {
-        pageNum: 1,
-        pageSize: 6,
-        username: "",
-        sex: "",
-        nickname: ""
-      },
+      queryMap: {pageNum: 1, pageSize: 6, username: "", sex: "", nickname: ""},
       userList: [],
-
-      addForm: {
-        username: "",
-        nickname: "",
-        password: "",
-        email: "",
-        phoneNumber: "",
-        sex: "",
-        birth: ""
-      }, //添加表单
+      addForm: {username: "", nickname: "", password: "", email: "", phoneNumber: "", sex: "", birth: ""}, //添加表单
       editForm: {}, //更新表单
       addFormRules: {
         username: [
@@ -383,14 +286,7 @@ export default {
         sex: [{ required: true, message: "请选择性别", trigger: "blur" }],
         birth: [{ required: true, message: "请填写出生日期", trigger: "blur" }],
         email: [{ required: true, validator: checkEmail, trigger: "blur" }],
-        phoneNumber: [
-          {
-            required: true,
-            message: "请输入联系方式",
-            validator: checkPhone,
-            trigger: "blur"
-          }
-        ],
+        phoneNumber: [{required: true, message: "请输入联系方式", validator: checkPhone, trigger: "blur"}],
         nickname: [
           { required: true, message: "请输入昵称", trigger: "blur" },
           { min: 5, max: 10, message: "长度在 5 到 10 个字符", trigger: "blur" }
@@ -402,10 +298,7 @@ export default {
     };
   },
   methods: {
-
-    /**
-     * 重置
-     */
+    /* 重置 */
     reset(){
       this.queryMap= {
         pageNum: 1,
@@ -415,9 +308,7 @@ export default {
                 nickname: ""
       };
     },
-    /**
-     * 加载用户表格
-     */
+    /* 加载用户表格*/
     downExcel() {
       var $this = this;
       const res = axios
@@ -442,9 +333,7 @@ export default {
           window.URL.revokeObjectURL(url);
         });
     },
-    /**
-     * 弹出用户分配角色
-     */
+    /* 弹出用户分配角色*/
     async assignRoles(id) {
       const loading = this.$loading({
         lock: true,
@@ -457,16 +346,13 @@ export default {
         this.roles = res.data.roles;
         this.value = res.data.values;
         this.uid = id;
-
         setTimeout(() => {
           loading.close();
           this.assignDialogVisible = true;
         }, 400);
       }
     },
-    /**
-     * 确定分配角色
-     */
+    /* 确定分配角色 */
     async doAssignRoles() {
       this.assignDialogVisible = true;
       this.btnLoading = true;
@@ -487,9 +373,7 @@ export default {
       this.btnLoading = false;
       this.btnDisabled = false;
     },
-    /**
-     * 加载用户列表
-     */
+    /*加载用户列表*/
     async getUserList() {
       const { data: res } = await this.$http.get("user/findUserList", {
         params: this.queryMap
@@ -498,12 +382,10 @@ export default {
       this.total = res.data.total;
       this.userList = res.data.rows;
     },
-    showSex(row, column) {
-      return row.sex == 1 ? "男" : "女";
-    },
-    /**
-     * 删除用户
-     */
+    // showSex(row, column) {
+    //   return row.sex == 1 ? "男" : "女";
+    // },
+    /* 删除用户*/
     async del(id) {
       var res = await this.$confirm(
         "此操作将永久删除该用户, 是否继续?",
@@ -534,9 +416,7 @@ export default {
         }
       }
     },
-    /**
-     * 添加用户
-     */
+    /* 添加用户 */
     async addUser() {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) {
@@ -562,11 +442,9 @@ export default {
         }
       });
     },
-    /**
-     * 更新用户
-     */
+    /* 更新用户 */
     async updateUser() {
-      this.$refs.editFormRef.validate(async valid => {
+      this.$refs.editFormRef.validate(async valid => {//ref校验
         if (!valid) {
           return;
         } else {
@@ -594,16 +472,12 @@ export default {
         }
       });
     },
-    /**
-     * 搜索用户
-     */
+    /* 搜索用户*/
     searchUser() {
       this.queryMap.pageNum = 1;
       this.getUserList();
     },
-    /**
-     * 修改用户信息
-     */
+    /* 修改用户信息*/
     async edit(id) {
       const { data: res } = await this.$http.get("user/edit/" + id);
       if (res.code == 200) {
@@ -613,39 +487,28 @@ export default {
         return this.$message.error("用户信息编辑失败:" + res.msg);
       }
     },
-    /**
-     *  改变页码
-     */
+    /*改变页码*/
     handleSizeChange(newSize) {
       this.queryMap.pageSize = newSize;
       this.getUserList();
     },
-    /**
-     * 翻页
-     */
+    /* 翻页 */
     handleCurrentChange(current) {
       this.queryMap.pageNum = current;
       this.getUserList();
     },
-
-    /**
-     * 关闭添加弹出框
-     */
+    /* 关闭添加弹出框*/
     closeDialog() {
       this.$refs.addFormRef.clearValidate();
       this.addForm.birth = "";
       this.addForm = {};
     },
-    /**
-     * 关闭编辑弹出框
-     */
+    /*关闭编辑弹出框*/
     editClose() {
       this.$refs.editFormRef.clearValidate();
       this.editForm = {};
     },
-    /**
-     * 禁用启用用户
-     */
+    /* 禁用启用用户*/
     async changUserStatus(row) {
       const { data: res } = await this.$http.put(
         "user/updateStatus/" + row.id + "/" + row.status
@@ -661,17 +524,13 @@ export default {
         });
       }
     },
-    /**
-     * 加载所有部门
-     */
+    /* 加载所有部门*/
     async getDepartmets() {
       const { data: res } = await this.$http.get("department/findAll");
       if (res.code !== 200) return this.$message.error("获取部门列表失败");
       this.departments = res.data;
     },
-    /**
-     * 显示用户性别
-     */
+    /* 显示用户性别*/
     showSex(row, column) {
       return row.sex == 1 ? "男" : "女";
     },

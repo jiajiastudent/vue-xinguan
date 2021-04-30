@@ -84,65 +84,28 @@
                 <el-table-column prop="operator" label="操作员" width="180"></el-table-column>
                 <el-table-column prop="supplierName" label="物资提供方" width="180"></el-table-column>
                 <el-table-column prop="createTime" label="入库时间" sortable width="180"></el-table-column>
-                <el-table-column label="操作" fixed="right" width="200">
+                <el-table-column label="操作"  width="200">
                     <template slot-scope="scope">
-                        <el-button icon="el-icon-view"  @click="detail(scope.row.id)"
-                                   type="text" size="small">明细
-
+                        <el-button icon="el-icon-view"  @click="detail(scope.row.id)" type="text" size="small">明细
                         </el-button>
-
-                        <!--                        给操作员使用的按钮-->
+                        <!--给操作员使用的按钮-->
                         <span v-if="scope.row.status==0">
-                             <el-popconfirm
-                                     @onConfirm="remove(scope.row.id)"
-                                     style="margin-left: 20px;"
-                                     confirmButtonText='好的'
-                                     cancelButtonText='不用了'
-                                     icon="el-icon-info"
-                                     iconColor="red"
-                                     title="这是一段内容确定移入回收站吗？"
-                             >
-              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">回收站</el-button>
-            </el-popconfirm>
+                            <!-- 给操作员使用的按钮(回收站)-->
+                          <el-button icon="el-icon-s-operation"  @click="remove(scope.row.id)" type="text" size="small"
+                                     iconColor="red">回收站</el-button>
                         </span>
-                        <!--   给操作员使用的按钮(回收站)-->
                         <span v-if="scope.row.status==1">
-                             <el-popconfirm
-                                     @onConfirm="back(scope.row.id)"
-                                     style="margin-left:10px;"
-                                     confirmButtonText='好的'
-                                     cancelButtonText='不用了'
-                                     icon="el-icon-info"
-                                     iconColor="green"
-                                     title="这是一段内容确定恢复数据吗？"
-                             >
-                            <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">还原</el-button>
-                        </el-popconfirm>
-                                <el-popconfirm
-                                        style="margin-left:20px;"
-                                        @onConfirm="del(scope.row.id)"
-                                        title="这是一段内容确定删除吗？"
-                                >
-                            <el-button type="text" slot="reference" size="small" icon="el-icon-delete">删除</el-button>
-                        </el-popconfirm>
+                          <el-button icon="el-icon-s-operation"  @click="back(scope.row.id)" type="text" size="small"
+                                     iconColor="red">还原</el-button>
+                          <el-button icon="el-icon-delete"  @click="del(scope.row.id)" type="text" size="small"
+                                     iconColor="red">删除</el-button>
                         </span>
-
-                        <!--                        给审核员使用的按钮-->
+                        <!--给审核员使用的按钮-->
                         <span v-if="scope.row.status==2">
-                          <el-popconfirm
-                                  style="margin-left:20px;"
-                                  @onConfirm="publish(scope.row.id)"
-                                  title="审核通过后库存将更新,是否通过"
-                          >
-                        <el-button type="text" slot="reference" size="small" icon="el-icon-refresh">通过</el-button>
-                    </el-popconfirm>
-                        <el-popconfirm
-                                style="margin-left:20px;"
-                                @onConfirm="del(scope.row.id)"
-                                title="这是一段内容确定删除吗？"
-                        >
-                            <el-button type="text" slot="reference" size="small" icon="el-icon-delete">删除</el-button>
-                        </el-popconfirm>
+                          <el-button icon="el-icon-refresh"  @click="publish(scope.row.id)" type="text" size="small"
+                                     iconColor="red">通过</el-button>
+                          <el-button icon="el-icon-delete"  @click="del(scope.row.id)" type="text" size="small"
+                                     iconColor="red">删除</el-button>
                         </span>
 
                     </template>
@@ -208,21 +171,6 @@
               <el-table-column prop="name" label="名称"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" prop="pnum" label="商品编号"></el-table-column>
                <el-table-column prop="model" label="规格"></el-table-column>
-              <el-table-column
-                      prop="imageUrl"
-                      label="图片"
-                      align="center"
-                      width="150px"
-                      padding="0px"
-              >
-                <template slot-scope="scope">
-                  <img
-                          :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                          alt
-                          style="width: 30px;height:30px"
-                  />
-                </template>
-              </el-table-column>
                <el-table-column prop="count" label="数量"></el-table-column>
                 <el-table-column prop="unit" label="单位"></el-table-column>
             </el-table>

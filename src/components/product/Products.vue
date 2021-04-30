@@ -17,26 +17,12 @@
             </el-container>
             <el-row :gutter="6">
                 <el-col :span="5">
-                    <el-cascader
-                            size="mini"
-                            placeholder="请选择分类查询"
-                            :change-on-select="true"
-                            @change="selectChange"
-                            v-model="categorykeys"
-                            :props="searchSelectProps"
-                            :options="catetorys"
-                            clearable
-                    ></el-cascader>
+                    <el-cascader size="mini" placeholder="请选择分类查询" :change-on-select="true" @change="selectChange"
+                            v-model="categorykeys" :props="searchSelectProps" :options="catetorys" clearable></el-cascader>
                 </el-col>
                 <el-col :span="6">
-                    <el-input
-                            clearable
-                            size="mini"
-                            v-model="queryMap.name"
-                            placeholder="请输入物资名称查询"
-                            @clear="search"
-                            class="input-with-select"
-                    ></el-input>
+                    <el-input clearable size="mini" v-model="queryMap.name" placeholder="请输入物资名称查询"
+                            @clear="search" class="input-with-select"></el-input>
                 </el-col>
                 <el-col :span="5">
                     <template>
@@ -51,42 +37,32 @@
                     <el-button size="mini" type="primary" icon="el-icon-search" @click="search">查找</el-button>
                     <el-button size="mini" icon="el-icon-refresh-right" type="warning" @click="resetForm">重置</el-button>
                     <el-button size="mini" type="success" icon="el-icon-circle-plus-outline" @click="openAdd"
-                               v-hasPermission="'product:add'">添加
-                    </el-button>
+                               v-hasPermission="'product:add'">添加</el-button>
                     <el-button size="mini" icon="el-icon-refresh" @click="getproductList">刷新</el-button>
                 </el-col>
             </el-row>
-
             <!-- 表格区域 -->
             <template>
-                <el-table
-                        size="mini"
-                        v-loading="loading"
-                        border
-                        stripe
-                        :data="productData"
-                        style="width: 100%;margin-top:20px;"
-                        height="700"
-                >
+                <el-table size="mini" v-loading="loading" border stripe :data="productData" style="width: 100%;margin-top:20px;" height="700">
                     <el-table-column prop="id" type="index" label="ID"></el-table-column>
-                    <el-table-column prop="imageUrl" label="图片" align="center" width="150px" padding="0px">
-                        <!--            <template slot-scope="scope">-->
-                        <!--              <img-->
-                        <!--                slot="error"-->
-                        <!--                :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
-                        <!--                alt-->
-                        <!--                style="width: 55px;height:55px"-->
-                        <!--              />-->
-                        <!--            </template>-->
-                        <template slot-scope="scope">
-                            <el-popover placement="right" trigger="hover">
-                                <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                                     style="height: 200px;width: 200px"/>
-                                <img slot="reference" :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                                     :alt="scope.row.imgUrl" style="height: 38px;width: 38px;cursor: pointer">
-                            </el-popover>
-                        </template>
-                    </el-table-column>
+<!--                    <el-table-column prop="imageUrl" label="图片" align="center" width="150px" padding="0px">-->
+<!--                        &lt;!&ndash;            <template slot-scope="scope">&ndash;&gt;-->
+<!--                        &lt;!&ndash;              <img&ndash;&gt;-->
+<!--                        &lt;!&ndash;                slot="error"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                :src="'https://www.zykhome.club/'+scope.row.imageUrl"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                alt&ndash;&gt;-->
+<!--                        &lt;!&ndash;                style="width: 55px;height:55px"&ndash;&gt;-->
+<!--                        &lt;!&ndash;              />&ndash;&gt;-->
+<!--                        &lt;!&ndash;            </template>&ndash;&gt;-->
+<!--                        <template slot-scope="scope">-->
+<!--                            <el-popover placement="right" trigger="hover">-->
+<!--                                <img :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
+<!--                                     style="height: 200px;width: 200px"/>-->
+<!--                                <img slot="reference" :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
+<!--                                     :alt="scope.row.imgUrl" style="height: 38px;width: 38px;cursor: pointer">-->
+<!--                            </el-popover>-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                     <el-table-column prop="name" label="物资名称"></el-table-column>
                     <el-table-column prop="pnum" :show-overflow-tooltip='true' label="物资编号"></el-table-column>
                     <el-table-column label="物资规格" width="100">
@@ -111,56 +87,26 @@
                     <el-table-column prop="createTime" label="创建时间"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <!--              给管理员提供的恢复和删除-->
-                            <span v-if="scope.row.status==1">
-                 <el-popconfirm
-
-                         @onConfirm="back(scope.row.id)"
-                         style="margin-left:10px;"
-                         confirmButtonText='好的'
-                         cancelButtonText='不用了'
-                         icon="el-icon-info"
-                         iconColor="green"
-                         title="这是一段内容确定恢复吗？"
-                 >
-                <el-button type="text" size="mini" slot="reference" icon="el-icon-back">恢复</el-button>
-                 </el-popconfirm>
-              <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-delete"
-                         @click="del(scope.row.id)">删除</el-button>
-              </span>
-
-                            <!--              给操作员提供的编辑和回收-->
+                            <!--给管理员提供的恢复和删除-->
+                        <span v-if="scope.row.status==1">
+                          <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-info"
+                                     @click="back(scope.row.id)">恢复</el-button>
+                          <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-delete"
+                                     @click="del(scope.row.id)">删除</el-button>
+                        </span>
+                            <!--给操作员提供的编辑和回收-->
                             <span v-if="scope.row.status==0">
-               <el-button type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">编辑</el-button>
-              <el-popconfirm
-                      @onConfirm="remove(scope.row.id)"
-                      style="margin-left:10px;"
-                      confirmButtonText='好的'
-                      cancelButtonText='不用了'
-                      icon="el-icon-info"
-                      iconColor="red"
-                      title="这是一段内容确定移入回收站吗？"
-              >
-              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">回收站</el-button>
-            </el-popconfirm>
-              </span>
+                          <el-button type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">编辑</el-button>
+                          <el-button type="text" size="mini" icon="el-icon-info" @click="remove(scope.row.id)">回收站</el-button>
+                        </span>
+                          <!--给管理员提供的审核和不通过-->
+                        <span v-if="scope.row.status==2">
+                          <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-info"
+                                     @click="publish(scope.row.id)">通过</el-button>
+                          <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-delete"
+                                     @click="del(scope.row.id)">删除</el-button>
+                        </span>
 
-                            <!--          给管理员提供的审核和不通过-->
-                            <span v-if="scope.row.status==2">
-              <el-popconfirm
-                      @onConfirm="publish(scope.row.id)"
-                      style="margin-left:10px;"
-                      confirmButtonText='是的'
-                      cancelButtonText='不用了'
-                      icon="el-icon-info"
-                      iconColor="blue"
-                      title="确定审核通过吗？"
-              >
-              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">通过</el-button>
-            </el-popconfirm>
-              <el-button style="margin-left:10px;" type="text" size="mini" icon="el-icon-delete"
-                         @click="del(scope.row.id)">删除</el-button>
-                </span>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -191,24 +137,24 @@
             <el-form-item label="物资名称" prop="name">
               <el-input v-model="addRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="物资图片" prop="name">
-              <!-- 图片上传部分 -->
-              <el-upload
-                      :action="uploadApi"
-                      :class="{ disabled: uploadDisabled }"
-                      list-type="picture-card"
-                      :limit="limitcount"
-                      :on-change="handleChange"
-                      :on-remove="handleRemove"
-                      accept="image/*"
-                      :on-success="handleSuccess"
-                      :headers="headerObject"
-                      ref="upload"
-                      :on-preview="handlePictureCardPreview"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-            </el-form-item>
+<!--            <el-form-item label="物资图片" prop="name">-->
+<!--              &lt;!&ndash; 图片上传部分 &ndash;&gt;-->
+<!--              <el-upload-->
+<!--                      :action="uploadApi"-->
+<!--                      :class="{ disabled: uploadDisabled }"-->
+<!--                      list-type="picture-card"-->
+<!--                      :limit="limitcount"-->
+<!--                      :on-change="handleChange"-->
+<!--                      :on-remove="handleRemove"-->
+<!--                      accept="image/*"-->
+<!--                      :on-success="handleSuccess"-->
+<!--                      :headers="headerObject"-->
+<!--                      ref="upload"-->
+<!--                      :on-preview="handlePictureCardPreview"-->
+<!--              >-->
+<!--                <i class="el-icon-plus"></i>-->
+<!--              </el-upload>-->
+<!--            </el-form-item>-->
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple-light">
@@ -282,23 +228,23 @@
             <el-form-item label="物资名称" prop="name">
               <el-input v-model="editRuleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="物资图片" prop="name">
-              <!-- 图片上传部分 -->
-              <el-upload
-                      :action="uploadApi"
-                      :class="{ disabled: uploadDisabled }"
-                      list-type="picture-card"
-                      :limit="limitcount"
-                      accept="image/*"
-                      :on-success="editHandleSuccess"
-                      :headers="headerObject"
-                      ref="upload2"
-                      :on-preview="handlePictureCardPreview"
-                      :file-list="imgFilesList"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-            </el-form-item>
+<!--            <el-form-item label="物资图片" prop="name">-->
+<!--              &lt;!&ndash; 图片上传部分 &ndash;&gt;-->
+<!--              <el-upload-->
+<!--                      :action="uploadApi"-->
+<!--                      :class="{ disabled: uploadDisabled }"-->
+<!--                      list-type="picture-card"-->
+<!--                      :limit="limitcount"-->
+<!--                      accept="image/*"-->
+<!--                      :on-success="editHandleSuccess"-->
+<!--                      :headers="headerObject"-->
+<!--                      ref="upload2"-->
+<!--                      :on-preview="handlePictureCardPreview"-->
+<!--                      :file-list="imgFilesList"-->
+<!--              >-->
+<!--                <i class="el-icon-plus"></i>-->
+<!--              </el-upload>-->
+<!--            </el-form-item>-->
             <el-row>
               <el-col :span="12">
                 <el-form-item label="物资规格" prop="model">
@@ -662,7 +608,7 @@
             /**
              * 加载物资类别
              */
-            async getCatetorys() {
+            async getCatetorys1() {
                 const {data: res} = await this.$http.get(
                     "productCategory/categoryTree"
                 );

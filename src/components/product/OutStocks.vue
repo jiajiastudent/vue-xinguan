@@ -120,63 +120,21 @@
                     <el-table-column prop="createTime" label="发放时间" width="200px;"></el-table-column>
                     <el-table-column label="操作" fixed="right" width="200">
                         <template slot-scope="scope">
-                            <el-button icon="el-icon-view" type="text" size="small" @click="detail(scope.row.id)">
-                                明细
-                            </el-button>
-                            <!--                        给操作员使用的按钮-->
+                            <el-button icon="el-icon-view" type="text" size="small" @click="detail(scope.row.id)">明细</el-button>
+                            <!--给操作员使用的按钮-->
                             <span v-if="scope.row.status==0">
-                             <el-popconfirm
-                                     @onConfirm="remove(scope.row.id)"
-                                     style="margin-left: 20px;"
-                                     confirmButtonText='好的'
-                                     cancelButtonText='不用了'
-                                     icon="el-icon-info"
-                                     iconColor="red"
-                                     title="这是一段内容确定移入回收站吗？"
-                             >
-              <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">回收站</el-button>
-            </el-popconfirm>
-                        </span>
+                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="remove(scope.row.id)">回收站</el-button>
+                            </span>
                             <!--   给操作员使用的按钮(回收站)-->
                             <span v-if="scope.row.status==1">
-                             <el-popconfirm
-                                     @onConfirm="back(scope.row.id)"
-                                     style="margin-left:10px;"
-                                     confirmButtonText='好的'
-                                     cancelButtonText='不用了'
-                                     icon="el-icon-info"
-                                     iconColor="green"
-                                     title="这是一段内容确定恢复数据吗？"
-                             >
-                            <el-button type="text" slot="reference" size="mini" icon="el-icon-s-operation">还原</el-button>
-                        </el-popconfirm>
-                                <el-popconfirm
-                                        style="margin-left:20px;"
-                                        @onConfirm="del(scope.row.id)"
-                                        title="这是一段内容确定删除吗？"
-                                >
-                            <el-button type="text" slot="reference" size="small" icon="el-icon-delete">删除</el-button>
-                        </el-popconfirm>
-                        </span>
-
-                            <!--                        给审核员使用的按钮-->
+                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="back(scope.row.id)">还原</el-button>
+                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>
+                            </span>
+                            <!-- 给审核员使用的按钮-->
                             <span v-if="scope.row.status==2">
-                          <el-popconfirm
-                                  style="margin-left:20px;"
-                                  @onConfirm="publish(scope.row.id)"
-                                  title="审核通过后库存将更新,是否通过"
-                          >
-                        <el-button type="text" slot="reference" size="small" icon="el-icon-refresh">通过</el-button>
-                    </el-popconfirm>
-                        <el-popconfirm
-                                style="margin-left:20px;"
-                                @onConfirm="del(scope.row.id)"
-                                title="这是一段内容确定删除吗？"
-                        >
-                            <el-button type="text" slot="reference" size="small" icon="el-icon-delete">删除</el-button>
-                        </el-popconfirm>
-                        </span>
-
+                              <el-button icon="el-icon-refresh" type="text" size="small" @click="publish(scope.row.id)">通过</el-button>
+                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>
+                            </span>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -244,38 +202,31 @@
               <el-table-column prop="name" label="名称"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" prop="pnum" label="商品编号"></el-table-column>
                <el-table-column prop="model" label="规格"></el-table-column>
-              <el-table-column
-                      prop="imageUrl"
-                      label="图片"
-                      align="center"
-                      width="150px"
-                      padding="0px"
-              >
-                <template slot-scope="scope">
-                  <img
-                          :src="'https://www.zykhome.club/'+scope.row.imageUrl"
-                          alt
-                          style="width: 30px;height:30px"
-                  />
-                </template>
-              </el-table-column>
+<!--              <el-table-column-->
+<!--                      prop="imageUrl"-->
+<!--                      label="图片"-->
+<!--                      align="center"-->
+<!--                      width="150px"-->
+<!--                      padding="0px"-->
+<!--              >-->
+<!--                <template slot-scope="scope">-->
+<!--                  <img-->
+<!--                          :src="'https://www.zykhome.club/'+scope.row.imageUrl"-->
+<!--                          alt-->
+<!--                          style="width: 30px;height:30px"-->
+<!--                  />-->
+<!--                </template>-->
+<!--              </el-table-column>-->
                <el-table-column prop="count" label="数量"></el-table-column>
                 <el-table-column prop="unit" label="单位"></el-table-column>
                 <el-table-column prop="weight" label="重量(kg)"></el-table-column>
 
             </el-table>
               <!--              明细分页-->
-        <el-pagination
-                style="margin-top:20px;"
-                background
-                @current-change="handleDetailSizeChange"
-                :current-page="this.pageNum"
-                :page-size="3"
-                layout="prev, pager, next,total"
-                :total="this.detailTotal">
+        <el-pagination style="margin-top:20px;" background @current-change="handleDetailSizeChange" :current-page="this.pageNum"
+                :page-size="3" layout="prev, pager, next,total" :total="this.detailTotal">
         </el-pagination>
           </template>
-
         </span>
             </el-dialog>
             <!-- 地圖信息弹出框 -->
