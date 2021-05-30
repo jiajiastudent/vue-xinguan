@@ -7,7 +7,70 @@
             <el-breadcrumb-item>出库记录</el-breadcrumb-item>
         </el-breadcrumb>
         <!-- 卡片部分-->
+          <el-card style="margin-bottom:15px;" >
+            <label style="font-size:20px;font-weight: bold">可用车辆信息&nbsp&nbsp</label>
+            <el-col :span="24">
+              <label size="medium"  style="margin-right:10px;color:gray;font-size:18px;margin-bottom:10px" >库存数:{{carTotal}}/{{carTotalALL}}辆</label>
+            <el-tag size="medium"  type="success" v-for="item in carTypeTable"
+                    style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==1">小型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
+            <el-tag size="medium"  type="success" v-for="item in carTypeTable"
+                    style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==2">中型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
+            <el-tag size="medium"  type="success" v-for="item in carTypeTable"
+                    style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==3">大型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
+          </el-col>
+        </el-card>
+      <el-card style="margin-bottom:15px;" >
+        <label style="font-size:20px;font-weight: bold">物资库存信息</label>
+        <el-col :span="24">
+          <label size="medium"  style="margin-right:10px;color:gray;font-size:18px;margin-bottom:10px" >需求量/库存</label>
+          <el-tag size="medium"  type="success" v-for="item in alldetailTable" v-if="alldetailvisible==true"
+                  style="margin-right:10px;font-size:18px;margin-bottom:10px">{{ item.name}}：{{item.need}}/{{ item.stock}}</el-tag>
+          <el-tag size="medium"  type="success"  v-if="alldetailvisible==false"
+                  style="margin-right:10px;font-size:18px;margin-bottom:10px">暂无需要匹配的物资</el-tag>
+        </el-col>
+      </el-card>
+      <el-card style="margin-bottom:15px;" v-if="consumerTableVisable">
+        <el-col :span="24">
+          <label style="font-size:20px;font-weight: bold">自动规划路线</label>
+<!--          <el-tag size="medium"  type="warning" style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="consumerTableVisable">自动规划的路线:</el-tag>-->
+          <div  v-for="item in consumerByAuto" style="margin-right:2px;font-size:18px;margin-bottom:10px" v-if="consumerTableVisable">
+
+            <el-tag style="margin-right:2px;font-size:18px;margin-bottom:10px;margin-left: 15px;margin-right: 15px">
+              车牌号：{{item.carNum}}
+            </el-tag>
+            <el-tag  v-if="item.type==3"style="margin-right:2px;font-size:18px;margin-bottom:10px">大型卡车</el-tag>
+            <el-tag  v-if="item.type==2"style="margin-right:2px;font-size:18px;margin-bottom:10px">中型卡车</el-tag>
+            <el-tag  v-if="item.type==1"style="margin-right:2px;font-size:18px;margin-bottom:10px">小型卡车</el-tag>
+            <el-tag type="info"style="margin-right:2px;font-size:18px;margin-bottom:10px;margin-left: 15px" >全程:{{item.distance}}km 大约需要{{item.hour}}h {{item.min}}min</el-tag>
+            <el-dropdown trigger="click">
+              <span style="margin-left:10px;font-size:18px;margin-bottom:10px">查看单号<el-badge class="mark" :value="item.outNumList.length" /><i class="el-icon-caret-bottom el-icon--right"></i></span>
+              <el-dropdown-menu slot="dropdown" style="border-left: 80px">
+                <el-dropdown-item  v-for="i in item.outNumList" @click="changeOutNum(i)">{{i}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
+
+
+<!--            <el-select v-model="value" placeholder="选择单号">-->
+<!--              <el-option-->
+<!--                  v-for="i in item.outNumList":label="i">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+            <div>
+              <label style="margin-left: 15px">路线：</label>
+              <el-tag  type="danger"v-for="i in item.consumerList"style="margin-right:2px;font-size:18px;margin-bottom:10px">
+                <label>{{ i.name}}</label>
+                <label>-></label>
+              </el-tag>
+              <el-tag   type="danger"v-if="consumerTableVisable"style="margin-right:2px;font-size:18px;margin-bottom:10px">仓库</el-tag>
+              <el-link type="success" size="medium" style="left:10px" @click="ClickGetMap(item.consumerList)">查看地图信息-></el-link>
+            </div>
+          </div>
+        </el-col>
+      </el-card>
+
         <el-card>
+          <label style="font-size:20px;font-weight: bold;margin-bottom: 10px">出库记录</label>
         <!--搜索部分-->
             <el-form size="mini" :inline="true" :model="queryMap" class="demo-form-inline">
                 <el-form-item label="发放单号">
@@ -16,17 +79,17 @@
                 <el-form-item label="发放类型">
                     <el-select v-model="queryMap.type" placeholder="发放类型">
                         <el-option label="全部类型" value=""></el-option>
-                        <el-option label="政府领取" value="0"></el-option>
-                        <el-option label="医院领取" value="1"></el-option>
+                        <el-option label="其他领取" value="0"></el-option>
+                        <el-option label="个人领取" value="1"></el-option>
                         <el-option label="小区领取" value="2"></el-option>
-                        <el-option label="个人领取" value="3"></el-option>
-                        <el-option label="其他领取" value="4"></el-option>
+                        <el-option label="医院领取" value="3"></el-option>
+                        <el-option label="政府领取" value="4"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-select    v-model="queryMap.status" placeholder="请选择状态">
                         <el-option label="已发放" :value="0"></el-option>
-                        <el-option label="回收站" :value="1"></el-option>
+                        <el-option label="发放中" :value="1"></el-option>
                         <el-option label="待审核" :value="2"></el-option>
                     </el-select>
                 </el-form-item>
@@ -39,67 +102,30 @@
                         <el-button type="success" >发放</el-button>
                     </router-link>
                 </el-form-item>
+                <el-form-item>
+                  <el-button  type="primary" @click="beignCreate" v-if="isAdmin">开始自动匹配</el-button>
+                </el-form-item>
             </el-form>
-            <el-col :span="24">
-                <el-tag size="medium"  type="warning" style="margin-right:10px;font-size:18px;margin-bottom:10px" >车辆可用数:{{carTotal}}/{{carTotalALL}}</el-tag>
-                <el-tag size="medium"  type="success" v-for="item in carTypeTable"
-                        style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==1">小型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
-                <el-tag size="medium"  type="success" v-for="item in carTypeTable"
-                        style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==2">中型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
-                <el-tag size="medium"  type="success" v-for="item in carTypeTable"
-                        style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="item.type==3">大型卡车(载重{{item.weight}}kg):{{ item.num}}辆</el-tag>
-            </el-col>
-            <el-col :span="24">
-                <el-tag size="medium"  type="warning" style="margin-right:10px;font-size:18px;margin-bottom:10px" >需求/仓库物资:</el-tag>
-                <el-tag size="medium"  type="success" v-for="item in alldetailTable"
-                        style="margin-right:10px;font-size:18px;margin-bottom:10px">{{ item.name}}：{{item.need}}/{{ item.stock}}</el-tag>
-                <el-button size="small" type="primary" @click="beignCreate">开始自动匹配</el-button>
-            </el-col>
-            <el-col :span="24">
-            <el-tag size="medium"  type="warning" style="margin-right:10px;font-size:18px;margin-bottom:10px" v-if="consumerTableVisable">自动规划的路线:</el-tag>
-                <div  v-for="item in consumerByAuto" style="margin-right:2px;font-size:18px;margin-bottom:10px" v-if="consumerTableVisable">
-                    <el-tag  type="info" v-if="item.type==3"style="margin-right:2px;font-size:18px;margin-bottom:10px">大型卡车</el-tag>
-                    <el-tag type="info" v-if="item.type==2"style="margin-right:2px;font-size:18px;margin-bottom:10px">中型卡车</el-tag>
-                    <el-tag type="info" v-if="item.type==1"style="margin-right:2px;font-size:18px;margin-bottom:10px">小型卡车</el-tag>
-                    <el-tag type="info"style="margin-right:2px;font-size:18px;margin-bottom:10px">
-                        车牌号：{{item.carNum}}
-                    </el-tag>
-                    <el-tag type="info"style="margin-right:2px;font-size:18px;margin-bottom:10px">全程:{{item.distance}}km 大约需要{{item.hour}}h {{item.min}}min</el-tag>
-                    <el-tag  type="danger"v-for="i in item.consumerList"style="margin-right:2px;font-size:18px;margin-bottom:10px">
-                        <label>{{ i.name}}</label>
-                        <label>-></label>
-                    </el-tag>
-                    <el-tag   type="danger"v-if="consumerTableVisable"style="margin-right:2px;font-size:18px;margin-bottom:10px">仓库</el-tag>
-                    <el-link type="success" size="medium" style="left:10px" @click="ClickGetMap(item.consumerList)">查看地图信息-></el-link>
-                </div>
-            </el-col>
+
             <!--<el-tag size="medium"  type="success"-->
                     <!--style="margin-left:600px;font-size:18px;margin-bottom:10px"v-if="tableDataStatus">全部物资已发货</el-tag>-->
 <!--            数据表格-->
-                <el-table
-                        size="mini"
-                        border
-                        :data="tableData"
-                        style="width: 100%;height: 450px; margin-bottom:10px" >
+
+                <el-table size="mini" border :data="tableData" style="width: 100%;height: 450px; margin-bottom:10px" >
                     <el-table-column label="#" prop="id" width="50"></el-table-column>
                     <el-table-column  prop="outNum" :show-overflow-tooltip='true' label="发放单号" width="180"></el-table-column>
                     <el-table-column prop="type" label="发放类型" width="100">
                         <template slot-scope="scope">
-                            <el-tag  effect="plain" size="mini"  type="success" v-if="scope.row.type===0">政府领取</el-tag>
-                            <el-tag  effect="plain" size="mini" type="danger"  v-else-if="scope.row.type===1">医院领取</el-tag>
+                            <el-tag  effect="plain" size="mini"  type="success" v-if="scope.row.type===0">其他领取</el-tag>
+                            <el-tag  effect="plain" size="mini" type="danger"  v-else-if="scope.row.type===1">个人领取</el-tag>
                             <el-tag  effect="plain" size="mini"  type="warning"  v-else-if="scope.row.type===2">小区领取</el-tag>
-                            <el-tag  effect="plain" size="mini"  type="info"  v-else-if="scope.row.type===3">个人领取</el-tag>
-                            <el-tag  effect="plain" size="mini"   v-else-if="scope.row.type===4">其他领取</el-tag>
+                            <el-tag  effect="plain" size="mini"  type="info"  v-else-if="scope.row.type===3">医院领取</el-tag>
+                            <el-tag  effect="plain" size="mini"   v-else-if="scope.row.type===4">政府领取</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="priority" label="紧急程度" width="180">
                         <template slot-scope="scope">
-                            <el-rate
-                                    :disabled="true"
-                                    v-model="scope.row.priority"
-                                    show-text
-                                    :texts="['不急','常规','紧急','特急','超急']"
-                            >
+                            <el-rate :disabled="true" v-model="scope.row.priority" show-text :texts="['不急','常规','紧急','特急','超急']">
                             </el-rate>
                         </template>
                     </el-table-column>
@@ -109,7 +135,7 @@
                     <el-table-column prop="phone" label="联系方式" width="120"></el-table-column>
                     <el-table-column prop="status" label="状态" width="100">
                         <template slot-scope="scope">
-                            <el-tag size="mini" type="danger" effect="plain" v-if="scope.row.status==1">回收</el-tag>
+                            <el-tag size="mini" type="danger" effect="plain" v-if="scope.row.status==1">发放中</el-tag>
                             <el-tag size="mini" effect="plain" v-if="scope.row.status==0">已放</el-tag>
                             <el-tag size="mini" effect="plain" type="warning" v-if="scope.row.status==2">审核中</el-tag>
                         </template>
@@ -118,38 +144,30 @@
                     <el-table-column prop="operator" label="操作员" width="150"></el-table-column>
 
                     <el-table-column prop="createTime" label="发放时间" width="200px;"></el-table-column>
-                    <el-table-column label="操作" fixed="right" width="200">
+                    <el-table-column label="操作"  width="200" >
                         <template slot-scope="scope">
                             <el-button icon="el-icon-view" type="text" size="small" @click="detail(scope.row.id)">明细</el-button>
                             <!--给操作员使用的按钮-->
-                            <span v-if="scope.row.status==0">
-                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="remove(scope.row.id)">回收站</el-button>
-                            </span>
+<!--                            <span v-if="scope.row.status==0">-->
+<!--                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="remove(scope.row.id)">发放中</el-button>-->
+<!--                            </span>-->
                             <!--   给操作员使用的按钮(回收站)-->
-                            <span v-if="scope.row.status==1">
-                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="back(scope.row.id)">还原</el-button>
-                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>
+                            <span v-if="scope.row.status==1&isAdmin">
+                              <el-button icon="el-icon-s-operation" type="text" size="small" @click="back(scope.row.id)">完成发放</el-button>
+<!--                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>-->
                             </span>
                             <!-- 给审核员使用的按钮-->
-                            <span v-if="scope.row.status==2">
+                            <span v-if="scope.row.status==2&isAdmin">
                               <el-button icon="el-icon-refresh" type="text" size="small" @click="publish(scope.row.id)">通过</el-button>
-                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>
+<!--                              <el-button icon="el-icon-delete" type="text" size="small" @click="del(scope.row.id)">删除</el-button>-->
                             </span>
                         </template>
                     </el-table-column>
                 </el-table>
 <!--                表格分页-->
-                <el-pagination
-                        style="margin-top:20px;"
-                        background
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="queryMap.pageNum"
-                        :page-sizes="[10, 20, 30, 40]"
-                        :page-size="queryMap.pageSize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="total"
-                ></el-pagination>
+                <el-pagination style="margin-top:20px;" background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                        :current-page="queryMap.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="queryMap.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                        :total="total"></el-pagination>
             <!-- 发放明细 -->
             <el-dialog title="发放明细" :visible.sync="dialogVisible" @close="closeDetail" width="60%">
                 <!-- 来源信息-->
@@ -174,11 +192,6 @@
                             <el-col :span="6">
                                 <div class="grid-content bg-purple">
                                     <span style="font-size: 11px;color: #303030;">电话 : </span>&nbsp;<el-tag size="mini" >{{consumer.phone}}</el-tag>
-                                </div>
-                            </el-col>
-                            <el-col :span="6">
-                                <div class="grid-content bg-purple">
-                                    <span style="font-size: 11px;color: #303030;">重量（kg） : </span>&nbsp;<el-tag size="mini" >{{consumer.weight}}</el-tag>
                                 </div>
                             </el-col>
 
@@ -222,7 +235,7 @@
                 <el-table-column prop="weight" label="重量(kg)"></el-table-column>
 
             </el-table>
-              <!--              明细分页-->
+              <!-- 明细分页-->
         <el-pagination style="margin-top:20px;" background @current-change="handleDetailSizeChange" :current-page="this.pageNum"
                 :page-size="3" layout="prev, pager, next,total" :total="this.detailTotal">
         </el-pagination>
@@ -256,7 +269,10 @@
     export default {
         data() {
             return {
+                isAdmin:false,
+                value: '',
                 // waypoints:[ {lng: 113.33, lat: 37.84},{lng: 112.53, lat: 23.87},{lng: 121.53, lat: 30.87} ],
+                alldetailvisible:false,
                 waypoints:[],
                 start: {lng: 116.124343, lat: 39.964918},
                 end: {lng: 116.124343, lat: 39.964918},
@@ -432,7 +448,11 @@
                 if (res.code !== 200) {
                     this.$message.error("获取明细失败:" + res.msg);
                 } else {
-                    this.alldetailTable = res.data
+
+                    this.alldetailTable = res.data;
+                    if(this.alldetailTable.length!=0){
+                      this.alldetailvisible=true;
+                    }
                     //console.log(res.data)
                 }
             },
@@ -440,22 +460,22 @@
             async back(id){
                 const { data: res } = await this.$http.put("outStock/back/"+id);
                 if (res.code !== 200) {
-                    return this.$message.error("从回收站恢复失败:"+res.msg);
+                    return this.$message.error("加入已完成失败:"+res.msg);
                 } else {
                     this.loadTableData();
                     this.alldetail();
-                    return this.$message.success("从回收站中已恢复");
+                    return this.$message.success("已加入完成发放");
                 }
             },
-            /* 移除回收站*/
+            /* 移除发放中*/
             async remove(id) {
                 const {data: res} = await this.$http.put("outStock/remove/" + id);
                 if (res.code !== 200) {
-                    return this.$message.error("移入回收站失败:" + res.msg);
+                    return this.$message.error("移入发放中失败:" + res.msg);
                 } else {
                     this.loadTableData();
                     this.alldetail();
-                    return this.$message.success("移入回收站成功");
+                    return this.$message.success("移入发放中成功");
                 }
             },
             /* 重置查询表单*/
@@ -495,6 +515,16 @@
                 this.queryMap.pageNum = 1;
                 this.loadTableData();
             },
+            //搜索
+            changeOutNum(outNum) {
+              console.log(begin)
+              this.queryMap.pageNum = 1;
+              this.queryMap.outNum = outNum;
+              this.queryMap.status = 0;
+              this.loadTableData();
+              console.log(end)
+
+            },
             /*删除明细*/
             async del(id) {
                 const {data: res} = await this.$http.get("outStock/delete/" + id);
@@ -509,6 +539,7 @@
 
         },
         created() {
+          this.isAdmin = this.$store.state.userInfo.isAdmin;
             this.getCarList();
             this.getCarListALL();
             this.getCarListType();

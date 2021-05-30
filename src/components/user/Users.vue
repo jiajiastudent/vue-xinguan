@@ -274,7 +274,7 @@ export default {
       addFormRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -286,7 +286,7 @@ export default {
         sex: [{ required: true, message: "请选择性别", trigger: "blur" }],
         birth: [{ required: true, message: "请填写出生日期", trigger: "blur" }],
         email: [{ required: true, validator: checkEmail, trigger: "blur" }],
-        phoneNumber: [{required: true, message: "请输入联系方式", validator: checkPhone, trigger: "blur"}],
+        phoneNumber: [{required: true, message: "请输入正确格式联系方式", validator: checkPhone, trigger: "blur"}],
         nickname: [
           { required: true, message: "请输入昵称", trigger: "blur" },
           { min: 5, max: 10, message: "长度在 5 到 10 个字符", trigger: "blur" }

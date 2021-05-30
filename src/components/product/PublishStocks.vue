@@ -45,9 +45,9 @@
                             </el-form-item>
                             <el-form-item label="领取类型" prop="type">
                                 <el-radio-group v-model="addRuleForm.type">
-                                    <el-radio  :size="'mini'" :label="0">政府</el-radio><el-radio  :size="'mini'" :label="1">医院</el-radio>
-                                    <el-radio  :size="'mini'" :label="2">小区</el-radio><el-radio  :size="'mini'" :label="3">个人</el-radio>
-                                    <el-radio  :size="'mini'" :label="4">其他</el-radio>
+                                    <el-radio  :size="'mini'" :label="0">其他</el-radio><el-radio  :size="'mini'" :label="1">个人</el-radio>
+                                    <el-radio  :size="'mini'" :label="2">小区</el-radio><el-radio  :size="'mini'" :label="3">医院</el-radio>
+                                    <el-radio  :size="'mini'" :label="4">政府</el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <div v-if="existence==0">

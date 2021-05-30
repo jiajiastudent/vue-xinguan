@@ -84,24 +84,24 @@
                 <el-table-column prop="operator" label="操作员" width="180"></el-table-column>
                 <el-table-column prop="supplierName" label="物资提供方" width="180"></el-table-column>
                 <el-table-column prop="createTime" label="入库时间" sortable width="180"></el-table-column>
-                <el-table-column label="操作"  width="200">
+                <el-table-column label="操作"  width="200" >
                     <template slot-scope="scope">
                         <el-button icon="el-icon-view"  @click="detail(scope.row.id)" type="text" size="small">明细
                         </el-button>
                         <!--给操作员使用的按钮-->
-                        <span v-if="scope.row.status==0">
+                        <span v-if="scope.row.status==0&isAdmin" >
                             <!-- 给操作员使用的按钮(回收站)-->
                           <el-button icon="el-icon-s-operation"  @click="remove(scope.row.id)" type="text" size="small"
-                                     iconColor="red">回收站</el-button>
+                                     iconColor="red" >回收站</el-button>
                         </span>
-                        <span v-if="scope.row.status==1">
+                        <span v-if="scope.row.status==1&isAdmin">
                           <el-button icon="el-icon-s-operation"  @click="back(scope.row.id)" type="text" size="small"
                                      iconColor="red">还原</el-button>
                           <el-button icon="el-icon-delete"  @click="del(scope.row.id)" type="text" size="small"
                                      iconColor="red">删除</el-button>
                         </span>
                         <!--给审核员使用的按钮-->
-                        <span v-if="scope.row.status==2">
+                        <span v-if="scope.row.status==2&isAdmin">
                           <el-button icon="el-icon-refresh"  @click="publish(scope.row.id)" type="text" size="small"
                                      iconColor="red">通过</el-button>
                           <el-button icon="el-icon-delete"  @click="del(scope.row.id)" type="text" size="small"
@@ -196,6 +196,7 @@
     export default {
         data() {
             return {
+              isAdmin:false,
                 pickerOptions: {
                     shortcuts: [
                         {
@@ -396,6 +397,7 @@
             }
         },
         created() {
+          this.isAdmin = this.$store.state.userInfo.isAdmin;
             this.loadTableData();
             setTimeout(() => {
                 this.loading = false;

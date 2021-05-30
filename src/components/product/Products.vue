@@ -37,7 +37,7 @@
                     <el-button size="mini" type="primary" icon="el-icon-search" @click="search">查找</el-button>
                     <el-button size="mini" icon="el-icon-refresh-right" type="warning" @click="resetForm">重置</el-button>
                     <el-button size="mini" type="success" icon="el-icon-circle-plus-outline" @click="openAdd"
-                               v-hasPermission="'product:add'">添加</el-button>
+                               v-hasPermission="'product:add'" v-if="isAdmin">添加</el-button>
                     <el-button size="mini" icon="el-icon-refresh" @click="getproductList">刷新</el-button>
                 </el-col>
             </el-row>
@@ -85,7 +85,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" label="创建时间"></el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column label="操作" v-if="isAdmin">
                         <template slot-scope="scope">
                             <!--给管理员提供的恢复和删除-->
                         <span v-if="scope.row.status==1">
@@ -124,7 +124,7 @@
                     :total="total"
             ></el-pagination>
             <!-- 物资添加弹出框 -->
-            <el-dialog title="添加物资" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
+            <el-dialog title="添加物资" :visible.sync="addDialogVisible"  width="50%" @close="closeAddDialog" >
         <span>
           <el-form
                   size="mini"
@@ -313,6 +313,7 @@
     export default {
         data() {
             return {
+                isAdmin:false,
                 // uploadApi:'https://www.zykhome.club/api/upload/image',
                 uploadApi:'http://localhost:8081/upload/image',
                 btnLoading: false,
@@ -631,7 +632,8 @@
             }
         },
         created() {
-            this.getproductList();
+          this.isAdmin = this.$store.state.userInfo.isAdmin;
+          this.getproductList();
             this.getCatetorys();
             setTimeout(() => {
                 this.loading = false;

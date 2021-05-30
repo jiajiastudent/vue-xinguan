@@ -11,7 +11,7 @@
       <el-row :gutter="10">
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <h1>QQ交流群： 830790908</h1>
+            <h1></h1>
             <el-image
               style="width:250px;"
               :src="'https://www.zykcoderman.xyz/resources/res/images/weixin.png'"

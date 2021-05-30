@@ -16,6 +16,12 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import { hasPermission } from './utils/permissionDirect'
 import BaiduMap from 'vue-baidu-map';
 // import VueSource from 'vue-source';
+import Router from 'vue-router'
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
+
 const Plugins = [ hasPermission ]
 Plugins.map((plugin) => {
   Vue.use(plugin)

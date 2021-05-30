@@ -17,7 +17,8 @@
         </el-button>
       </el-button-group>
       <el-row :gutter="20">
-        <el-col style="margin-top: 10px;" v-for="item in rumorList" :key="item.id" :span="24" v-loading="loading">
+        <el-col style="margin-top: 10px;" v-for="item in rumorList" :key="item.id" :span="24"
+                v-loading="loading" element-loading-text = "努力加载中...">
           <div class="grid-content bg-purple">
             <el-row>
               <el-col :span="20" style="background-color: rgba(200,200,169,0.11)">
@@ -31,7 +32,6 @@
                       <span style="font-size: 11px;color: #3099f2;margin-left:20px;">信息来源:</span>
                       <span style="font-size: 11px;color: #3099f2;margin-left:10px;">{{item.infoSource}}</span>
                       <el-link style="margin-left:10px;" type="primary"  @click="hrefClick(item.sourceUrl)">详细内容></el-link>
-
                     </el-col>
                   </div>
                 </div>

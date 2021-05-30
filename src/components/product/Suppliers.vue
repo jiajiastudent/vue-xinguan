@@ -17,155 +17,74 @@
           <el-input v-model="queryMap.contact" clearable @clear="search" placeholder="联系人"></el-input>
         </el-form-item>
         <el-form-item label="具体地点">
-          <el-input
-                  clearable
-                  v-model="queryMap.name"
-                  placeholder="请具体地点查询"
-                  @clear="search"
-                  class="input-with-el-select"
-          ></el-input>
+          <el-input clearable v-model="queryMap.name" placeholder="请具体地点查询" @clear="search" class="input-with-el-select"></el-input>
         </el-form-item>
         <el-form-item>
          <el-button icon="el-icon-search" @click="search" type="primary"> 查询</el-button>
-          <el-button
-                  v-hasPermission="'supplier:add'"
-                  type="success"
-                  icon="el-icon-circle-plus-outline"
-                  @click="addDialogVisible=true"
-          >添加</el-button>
+          <el-button v-hasPermission="'supplier:add'" type="success" icon="el-icon-circle-plus-outline" @click="addDialogVisible=true"  v-if="isAdmin">添加</el-button>
         </el-form-item>
       </el-form>
-
-
-
-
-
-
       <!-- 表格区域 -->
       <template>
-        <el-table
-          border
-          size="mini"
-          v-loading="loading"
-          stripe
-          :data="supplierData"
-          style="width: 95%;"
-          height="650"
-        >
+        <el-table border size="mini" v-loading="loading" stripe :data="supplierData" height="650">
         <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
-
           <el-table-column label="物资提供方地址">
-            <el-table-column
-                    prop="address"
-                    label="省份"
-                    width="130">
+            <el-table-column prop="address" label="省份" width="130">
               <template slot-scope="scope">
                 <span v-text="scope.row.address.split('/')[0]"></span>
               </template>
             </el-table-column>
-            <el-table-column
-                    prop="address"
-                    label="市"
-                    width="100">
+            <el-table-column prop="address" label="市" width="100">
               <template slot-scope="scope">
                 <span v-text="scope.row.address.split('/')[1]"></span>
               </template>
             </el-table-column>
-            <el-table-column
-                    prop="address"
-                    label="区县"
-                    width="100">
+            <el-table-column prop="address" label="区县" width="100">
               <template slot-scope="scope">
                 <span v-text="scope.row.address.split('/')[2]"></span>
               </template>
             </el-table-column>
-            <el-table-column
-                    prop="name"
-                    label="地址"
-                    width="180">
+            <el-table-column prop="name" label="地址" width="180">
             </el-table-column>
           </el-table-column>
-
           <el-table-column prop="createTime" label="创建时间" width="180"></el-table-column>
           <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
           <el-table-column prop="contact" label="联系人" width="120"></el-table-column>
           <el-table-column prop="phone" label="电话" width="120"></el-table-column>
           <el-table-column prop="sort" label="排序" width="80"></el-table-column>
-          <el-table-column label="操作" fixed="right" width="180">
+          <el-table-column label="操作"  width="200"  v-if="isAdmin">
             <template slot-scope="scope">
-              <el-button
-              v-hasPermission="'supplier:edit'"
-                type="text"
-                size="mini"
-                icon="el-icon-edit"
-                @click="edit(scope.row.id)"
-              >编辑</el-button>
+              <el-button v-hasPermission="'supplier:edit'" type="text" size="mini" icon="el-icon-edit"
+                         @click="edit(scope.row.id)">编辑</el-button>
 
-              <el-button
-              v-hasPermission="'supplier:delete'"
-                type="text"
-               size="mini"
-                icon="el-icon-delete"
-                @click="del(scope.row.id)"
-              >删除</el-button>
+              <el-button v-hasPermission="'supplier:delete'" type="text" size="mini" icon="el-icon-delete"
+                         @click="del(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </template>
       <!-- 分页 -->
-      <el-pagination
-        style="margin-top:10px;"
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="this.queryMap.pageNum"
-        :page-sizes="[ 10, 15, 20]"
-        :page-size="this.queryMap.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      ></el-pagination>
+      <el-pagination style="margin-top:10px;" background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="this.queryMap.pageNum" :page-sizes="[ 10, 15, 20]" :page-size="this.queryMap.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
       <!-- 来源添加弹出框 -->
       <el-dialog title="添加来源" :visible.sync="addDialogVisible" width="50%" @close="closeAddDialog">
         <span>
-          <el-form
-            :model="addRuleForm"
-            :rules="addRules"
-            ref="addRuleFormRef"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
+          <el-form :model="addRuleForm" :rules="addRules" ref="addRuleFormRef" label-width="100px" class="demo-ruleForm">
            <el-row>
               <el-col :span="8">
                 <div class="grid-content bg-purple"></div>
                 <el-form-item label="省份" prop="valueProvince">
-                  <el-select
-                    v-model="addRuleForm.valueProvince"
-                    placeholder="请选择省"
-                    @change="changeProvince"
-                  >
-                    <el-option
-                      v-for="item in provinceList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
+                  <el-select v-model="addRuleForm.valueProvince" placeholder="请选择省" @change="changeProvince">
+                    <el-option v-for="item in provinceList" :key="item.value" :label="item.label" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="城市" prop="valueCity">
-                    <el-select
-                      v-model="addRuleForm.valueCity"
-                      placeholder="请选择市"
-                      @change="changeCity"
-                    >
-                      <el-option
-                        v-for="item in cityOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
+                    <el-select v-model="addRuleForm.valueCity" placeholder="请选择市" @change="changeCity">
+                      <el-option v-for="item in cityOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
@@ -173,17 +92,8 @@
               <el-col :span="8">
                 <div class="grid-content bg-purple">
                   <el-form-item label="区县" prop="valueOrigin">
-                    <el-select
-                      v-model="addRuleForm.valueOrigin"
-                      placeholder="请选择区"
-                      @change="changeOrigin"
-                    >
-                      <el-option
-                        v-for="item in originOptions"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
+                    <el-select v-model="addRuleForm.valueOrigin" placeholder="请选择区" @change="changeOrigin">
+                      <el-option v-for="item in originOptions" :key="item.label" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
@@ -195,8 +105,6 @@
             <el-form-item label="联系人" prop="contact">
               <el-input v-model="addRuleForm.contact"></el-input>
             </el-form-item>
-
-
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="addRuleForm.email"></el-input>
             </el-form-item>
@@ -215,20 +123,9 @@
       </el-dialog>
 
       <!-- 系别编辑弹出框 -->
-      <el-dialog
-        title="更新来源"
-        :visible.sync="editDialogVisible"
-        width="50%"
-        @close="closeEditDialog"
-      >
+      <el-dialog title="更新来源" :visible.sync="editDialogVisible" width="50%" @close="closeEditDialog">
         <span>
-          <el-form
-            :model="editRuleForm"
-            :rules="addRules"
-            ref="editRuleFormRef"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
+          <el-form :model="editRuleForm" :rules="addRules" ref="editRuleFormRef" label-width="100px" class="demo-ruleForm">
             <el-form-item label="省市区县" prop="address">
               <el-input disabled v-model="editRuleForm.address"></el-input>
             </el-form-item>
@@ -239,8 +136,6 @@
              <el-form-item label="联系人" prop="contact">
               <el-input v-model="editRuleForm.contact"></el-input>
             </el-form-item>
-
-
             <el-form-item label="邮箱" prop="email">
               <el-input v-model="editRuleForm.email"></el-input>
             </el-form-item>
@@ -300,6 +195,7 @@ export default {
       }, 100);
     };
     return {
+      isAdmin:false,
       loading:true,
       editDialogVisible: false,
       addDialogVisible: false, //添加弹框是否显示
@@ -573,6 +469,7 @@ export default {
     }
   },
   created() {
+    this.isAdmin = this.$store.state.userInfo.isAdmin;
     this.getSupplierList();
     this._getJsonData();
        setTimeout(() => {

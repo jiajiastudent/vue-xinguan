@@ -69,8 +69,6 @@
             <el-table-column prop="ip" label="IP地址" width="160"></el-table-column>
           <el-table-column prop="username" label="操作人" width="150" ></el-table-column>
             <el-table-column prop="createTime" label="时间" sortable width="180"></el-table-column>
-
-
           <el-table-column label="操作" width="100px;" >
             <template slot-scope="scope">
               <el-button type="text" size="mini"  v-hasPermission="'log:delete'" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>

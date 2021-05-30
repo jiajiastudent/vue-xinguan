@@ -24,24 +24,14 @@
       <!--菜单-->
       <el-aside :width="isOpen==true?'64px':'200px'">
         <div class="toggle-btn" @click="toggleMenu">|||</div>
-        <el-menu
-          class="el-menu-vertical-demo"
-          :collapse="isOpen"
-          :router="true"
-          :default-active="activePath"
-          background-color="#001529"
-          :collapse-transition="false"
-          text-color="rgba(255,255,255,0.7)"
-          unique-opened
-        >
+        <el-menu class="el-menu-vertical-demo" :collapse="isOpen" :router="true" :default-active="activePath"
+          background-color="#001529" :collapse-transition="false" text-color="rgba(255,255,255,0.7)" unique-opened>
           <MenuTree  :menuList="this.menuList"></MenuTree>
         </el-menu>
       </el-aside>
       <!--右边主体-->
       <el-main v-loading="loading">
-
         <router-view></router-view>
-
       </el-main>
     </el-container>
   </el-container>

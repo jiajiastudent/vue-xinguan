@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
-          <el-button type="success" icon="el-icon-circle-plus-outline" v-hasPermission="'consumer:add'" @click="openAdd">添加</el-button>
+          <el-button type="success" icon="el-icon-circle-plus-outline" v-hasPermission="'consumer:add'" @click="openAdd" v-if="isAdmin">添加</el-button>
         </el-form-item>
       </el-form>
 
@@ -39,10 +39,10 @@
           v-loading="loading"
           stripe
           :data="consumerData"
-          style="width: 85%;"
+          style="width: 100%;"
           height="650"
         >
-          <el-table-column prop="id" type="index" label="ID" width="50"></el-table-column>
+          <el-table-column prop="id" type="index" label="ID" width="100"></el-table-column>
           <el-table-column label="物资去向地址">
             <el-table-column
                     prop="address"
@@ -74,12 +74,11 @@
                     width="200">
             </el-table-column>
           </el-table-column>
-
-          <el-table-column prop="createTime" label="创建时间" width="190"></el-table-column>
-          <el-table-column prop="contact" label="联系人" width="140"></el-table-column>
-          <el-table-column prop="phone" label="电话" width="140"></el-table-column>
-          <el-table-column prop="sort" label="排序" width="100"></el-table-column>
-          <el-table-column label="操作" fixed="right" width="150">
+          <el-table-column prop="createTime" label="创建时间" width="200"></el-table-column>
+          <el-table-column prop="contact" label="联系人" width="150"></el-table-column>
+          <el-table-column prop="phone" label="电话" width="150"></el-table-column>
+          <el-table-column prop="sort" label="排序" width="150"></el-table-column>
+          <el-table-column label="操作"  width="200" v-if="isAdmin">
             <template slot-scope="scope">
               <el-button v-hasPermission="'consumer:edit'" type="text" size="mini" icon="el-icon-edit" @click="edit(scope.row.id)">编辑</el-button>
 
@@ -260,6 +259,7 @@ export default {
       }, 100);
     };
     return {
+      isAdmin:false,
       loading: true,
       editDialogVisible: false,
       addDialogVisible: false, //添加弹框是否显示
@@ -549,6 +549,7 @@ export default {
     }
   },
   created() {
+    this.isAdmin = this.$store.state.userInfo.isAdmin;
     this._getJsonData();
     this.getConsumerList();
     setTimeout(() => {

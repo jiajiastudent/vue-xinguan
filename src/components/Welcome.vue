@@ -8,116 +8,153 @@
     <el-row :gutter="15">
       <!-- 左边部分 -->
       <el-col :span="12">
-        <el-row :gutter="30" style="margin-bottom:0;">
-          <!--  用户信息,角色-->
-          <el-col :span="3.5" ><el-card class="grid-content bg-purple" style="height: 110px;">
-            <div>
-              <label style="font-size:20px;color:gray">USER&nbsp</label>
-              <label style="font-size:20px;">{{tableInfo[0].username}}</label>
-            </div>
-            <div>
-              <label style="font-size:20px;color:gray">&nbspROLR&nbsp</label>
-              <label style="font-size:20px;">{{tableInfo[0].roles}}</label>
-            </div>
-          </el-card></el-col>
-          <!--      菜单四个图标-->
-          <el-col :span="5.8"><el-card class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray" >
-            <el-row style="margin-top:0px;" :gutter="20">
-              <el-col :span="6">
-                <router-link to="/products">
-                  <img src="../assets/a1.svg" alt width="40.8px;"/>
-                </router-link>
-                <div style="font-size:12px;margin-left:0px;">物资资料</div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <router-link to="/stocks">
-                    <img src="../assets/a2.svg" alt width="40.8px;" style="cursor: pointer;margin-left:0px;"/>
-                  </router-link>
-                  <div style="font-size:12px;margin-left:0px;">物资库存</div>
+
+          <el-row >
+            <!--疫情病例数据-->
+            <el-card class="grid-content bg-purple" style="margin-bottom:15px;">
+              <label style="font-size:20px;font-weight: bold">疫情信息&nbsp</label>
+              <el-row style="margin-top:0px;margin-left:40px;font-size:20px;color:black" :gutter="20">
+                <el-col :span="4">
+              <div  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
+                <label style="font-size:15px; font-weight: 600">现存确诊</label>
+                <div>
+                  <label style=";font-size:30px ;font-weight: 500;border: 0px;color:rgb(174, 33, 44)">{{daily}}</label>
                 </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <router-link to="/inStocks">
-                    <img src="../assets/a3.svg" alt width="40.8px;" style="cursor: pointer;margin-left:0px;"/>
-                  </router-link>
-                  <div style="font-size:12px;margin-top:0px;margin-left:0px;">物资入库</div>
+                <label style="font-size:15px;">较昨日</label>
+                <label style="font-size:15px;color:rgb(174, 33, 44)">{{add_daily}}</label>
+              </div></el-col>
+                <el-col :span="4">
+              <div  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
+                <label style="font-size:15px; font-weight: 600">现存疑似</label>
+                <div>
+                  <label style=";font-size:30px ;font-weight: 500;border: 0px;color:rgb(247, 130, 7)">{{sustotal}}</label>
                 </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple"></div>
-                <router-link to="/outStocks">
-                  <img src="../assets/a4.svg" alt width="40.8px;" style="cursor: pointer;margin-left:0px;"/>
-                </router-link>
-                <div style="font-size:12px;margin-top:0px;margin-left:0px;">物资发放</div>
-              </el-col>
-            </el-row>
-          </el-card></el-col>
-          <!--    疫情病例数据-->
-          <el-col :span="2.5">
-            <el-card  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
-              <label style="font-size:15px; font-weight: 600">现存确诊</label>
-              <div>
-                <label style=";font-size:30px ;font-weight: 500;border: 0px;color:rgb(174, 33, 44)">{{daily}}</label>
-                <!--            info[0].value-->
-              </div>
-              <label style="font-size:15px;">较昨日</label>
-              <label style="font-size:15px;color:rgb(174, 33, 44)">{{add_daily}}</label>
-              <!--          {{info[0].yesterday}}-->
-            </el-card></el-col>
-          <el-col :span="2.5">
-            <el-card  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
-              <label style="font-size:15px; font-weight: 600">现存疑似</label>
-              <div>
-                <label style=";font-size:30px ;font-weight: 500;border: 0px;color:rgb(247, 130, 7)">{{sustotal}}</label>
-              </div>
-              <label style="font-size:15px;">较昨日</label>
-              <label style="font-size:15px;color:rgb(247, 130, 7)">{{add_sustotal}}</label>
-            </el-card></el-col>
-        </el-row>
-        <!--条形图-->
-        <el-row>
-          <el-card class="box-card" style="margin-top:15px;">
-            <!-- 为条形图 EChartst 准备一个具备大小（宽高）的 DOM -->
-            <div id="tianxing" style="width: 800px;height:250px;"></div>
+                <label style="font-size:15px;">较昨日</label>
+                <label style="font-size:15px;color:rgb(247, 130, 7)">{{add_sustotal}}</label>
+              </div></el-col>
+                <el-col :span="4">
+              <div  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
+                <label style="font-size:15px; font-weight: 600">累计死亡</label>
+                <div>
+                  <label style=";font-size:30px ;font-weight: 500;border: 0px;color:black">{{death}}</label>
+                </div>
+                <label style="font-size:15px;">较昨日</label>
+                <label style="font-size:15px;color:black">{{add_death}}</label>
+              </div></el-col>
+                <el-col :span="4">
+              <div  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
+                <label style="font-size:15px;font-weight: 600">累计境外输入</label>
+                <div>
+                  <label style=";font-size:30px ;font-weight: 500;border: 0px;color: crimson">{{jwsr}}</label>
+                </div>
+                <label style="font-size:15px;">较昨日</label>
+                <label style="font-size:15px;color:black">{{add_jwsr}}</label>
+              </div></el-col>
+                <el-col :span="4">
+              <div  class="grid-content bg-purple" style="height:110px;font-size:20px;color:gray;">
+                <label style="font-size:15px; font-weight: 600">累计治愈</label>
+                <div>
+                  <label style=";font-size:30px ;font-weight: 500;border: 0px;color:green">{{cure}}</label>
+                </div>
+                <label style="font-size:15px;">较昨日</label>
+                <label style="font-size:15px;color:green">{{add_cure}}</label>
+              </div></el-col>
+              </el-row>
+            <!--用户信息,角色-->
+            <!--<div>-->
+<!--              <label style="font-size:20px;font-weight: bold">用户信息&nbsp</label>-->
+<!--              <label style="font-size:20px;color:gray">用户：&nbsp</label>-->
+<!--              <label style="font-size:20px;">{{tableInfo[0].username}}</label>-->
+<!--              <label style="font-size:20px;color:gray">&nbsp角色：&nbsp</label>-->
+<!--              <label style="font-size:20px;">{{tableInfo[0].roles}}</label>-->
+<!--            </div>-->
           </el-card>
-        </el-row>
-        <!--地图-->
+          </el-row>
+          <!--菜单四个图标-->
+          <el-row :visible.sync="isAdmin">
+            <el-card style="margin-bottom:15px;" >
+              <label style="font-size:20px;font-weight: bold">菜单&nbsp</label>
+              <el-row style="margin-top:0px;margin-left:60px;font-size:20px;color:black" :gutter="20">
+                <el-col :span="6">
+                  <router-link to="/products">
+                    <img src="../assets/a1.svg" alt width="60.8px;"/>
+                  </router-link>
+                  <div style="font-size:16px;margin-left:0px;">物资资料</div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <router-link to="/stocks">
+                      <img src="../assets/a2.svg" alt width="60.8px;" style="cursor: pointer;margin-left:0px;"/>
+                    </router-link>
+                    <div style="font-size:16px;margin-left:0px;">物资库存</div>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <router-link to="/inStocks">
+                      <img src="../assets/a3.svg" alt width="60.8px;" style="cursor: pointer;margin-left:0px;"/>
+                    </router-link>
+                    <div style="font-size:16px;margin-top:0px;margin-left:0px;">物资入库</div>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple"></div>
+                  <router-link to="/outStocks">
+                    <img src="../assets/a4.svg" alt width="60.8px;" style="cursor: pointer;margin-left:0px;"/>
+                  </router-link>
+                  <div style="font-size:16px;margin-top:0px;margin-left:0px;">物资发放</div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </el-row>
+        <el-row>
+          <!--地图-->
           <el-card style="margin-top:15px;">
             <el-radio v-model="radio" label="1" style="padding-left: 300px" @change="changMap(radio)">确诊人数</el-radio>
             <el-radio v-model="radio" label="2" @change="changMap(radio)">现存人数</el-radio>
-            <el-link size="mini" @click="tomap()"  style="margin-left: 680px">更多信息
-              <i class="el-icon-view el-icon--right"></i></el-link>
+            <el-link size="mini" @click="tomap()"  style="margin-left: 680px" >更多信息<i class="el-icon-view el-icon--right"></i></el-link>
+
+<!--            <router-link to="/map">-->
+<!--              <p>1</p>-->
+<!--            </router-link>-->
             <!--<el-laber :to="{ path: '/home' }" style="padding-left: 650px" >更多信息></el-laber>-->
             <div ref="mapbox" style="height:450px;"></div>
           </el-card>
+        </el-row>
+        <el-row>
+          <!--新闻疫情-->
+          <el-card style="margin-top:15px;border:0px" :visible.sync="visible" v-loading="loading" element-loading-text = "努力加载中...">
+            <el-carousel height="200px" direction="vertical" :autoplay="false">
+              <el-carousel-item v-for="item in rumorList" :key="item.id">
+                <el-scrollbar >
+                  <el-col :span="24" style="background-color: rgba(255,0,0,0)">
+                    <div class="grid-content bg-purple-light">
+                      <el-row :gutter="20">
+                        <h4 style="margin-left:10px;">{{item.title}}</h4>
+                      </el-row>
+                      <div>
+                        <span style="color: #3099f2;margin-left:20px;">信息来源:</span>
+                        <span style="color: #3099f2;margin-left:10px;">{{item.infoSource}}</span>
+                        <el-link style="margin-left:10px;" type="primary"  @click="hrefClick(item.sourceUrl)">详细内容></el-link>
+                      </div>
+                      <div>
+                        <span style="margin-left: 20px;margin-bottom:-10px;color:black;">{{item.summary}}</span>
+                      </div>
+                    </div>
+                  </el-col>
+                </el-scrollbar>
+              </el-carousel-item>
+            </el-carousel>
+          </el-card>
+        </el-row>
+
       </el-col>
       <!-- 右边部分 -->
       <el-col :span="12">
-        <!--新闻疫情-->
-        <el-card style="margin-top:0px;border:0px" v-loading="loading">
-          <el-carousel height="200px" direction="vertical" :autoplay="false">
-            <el-carousel-item v-for="item in rumorList" :key="item.id">
-              <el-scrollbar >
-                <el-col :span="24" style="background-color: rgba(255,0,0,0)">
-                  <div class="grid-content bg-purple-light">
-                    <el-row :gutter="20">
-                      <h4>{{item.title}}</h4>
-                    </el-row>
-                    <div>
-                      <span style="color: #3099f2;margin-left:20px;">信息来源:</span>
-                      <span style="color: #3099f2;margin-left:10px;">{{item.infoSource}}</span>
-                      <el-link style="margin-left:10px;" type="primary"  @click="hrefClick(item.sourceUrl)">详细内容></el-link>
-                    </div>
-                    <div>
-                      <span style="margin-left: 20px;margin-bottom:-10px;color:black;">{{item.summary}}</span>
-                    </div>
-                  </div>
-                </el-col>
-              </el-scrollbar>
-            </el-carousel-item>
-          </el-carousel>
+        <!--条形图-->
+        <el-card class="box-card" style="margin-top:0px;margin-bottom: 10px">
+          <!-- 为条形图 EChartst 准备一个具备大小（宽高）的 DOM -->
+          <div id="tianxing" style="width: 800px;height:250px;"></div>
         </el-card>
         <div class="grid-content bg-purple-dark" >
           <el-card class="box-card" style="margin-top:15px;margin-bottom: 10px">
@@ -207,8 +244,10 @@ export default {
   },
   data() {
     return {
+      isAdmin:false,
       loading: true,
-      add_daily:'', daily :'',add_sustotal:'', sustotal :'',
+      visible:false,
+      add_daily:'', daily :'',add_sustotal:'', sustotal :'',death:'',add_death:'',cure:'',add_cure:'',jwsr:'',add_jwsr:'',
       rumorList: [],
       queryMap: { pageSize: 100, pageNum: 1 },
       xData: [],
@@ -236,6 +275,7 @@ export default {
       this.$http.get("https://lab.isaaclin.cn/nCoV/api/news?num=4&page="+page).then((response) => {
         this.rumorList = response.data.results;
         this.loading=false;
+        this.visible=true;
         //console.log(response.data.results)
       }, (error) => {})
     },
@@ -350,7 +390,13 @@ export default {
       this.info.push(data6);
       this.info.push(data7);
       this.info.push(data8);
-      this.loading=false;
+      //this.loading=false;
+      this.jwsr=data2.value;
+      this.add_jwsr=data2.yesterday;
+      this.death=data6.value;
+      this.add_death=data6.yesterday;
+      this.cure=data7.value;
+      this.add_cure=data7.yesterday;
       this.daily=data.econNum;
       this.add_daily=data1.yesterday;
       this.sustotal=data8.value;
@@ -570,6 +616,7 @@ export default {
     this.getStockList();
     this.userInfo = this.$store.state.userInfo;
     var roles = this.userInfo.isAdmin ? "超级管理员" : this.userInfo.roles;
+    //this.isAdmin=this.userInfo.isAdmin;
     this.tableInfo.push({
       username: this.userInfo.username,
       nickname: this.userInfo.nickname,
